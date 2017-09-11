@@ -4,6 +4,13 @@ using UnityEngine;
 
 public class DataStorage : MonoBehaviour {
 
+	public enum SceneType
+	{
+		PROCESSO,
+		NIVEL,
+		CASE
+	}
+
     public class Processo
     {
         int id;
@@ -43,7 +50,7 @@ public class DataStorage : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-		
+		DontDestroyOnLoad(gameObject);
 	}
 	
 	// Update is called once per frame
