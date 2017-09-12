@@ -48,6 +48,19 @@ public class DataStorage : MonoBehaviour {
         int caseId;
     }
 
+    public class SceneTrigger
+    {
+        public string originScene;
+        public string targetScene;
+        public int id;
+        public int x;
+        public int y;
+        public int altura;
+        public int largura;
+    }
+
+    static Dictionary<int, SceneTrigger> sceneTriggerStorage;
+
     // Use this for initialization
     void Start () {
 		DontDestroyOnLoad(gameObject);
@@ -57,4 +70,11 @@ public class DataStorage : MonoBehaviour {
 	void Update () {
 		
 	}
+
+    public static List<SceneTrigger> getSceneTrigger_ofScene(string sceneName)
+    {
+        List<SceneTrigger> sceneTriggerList = new List<SceneTrigger>();
+        //TODO - retornar a lista com as sceneTrigger cuja originScene é sceneName
+        return sceneTriggerList;
+    }
 }
