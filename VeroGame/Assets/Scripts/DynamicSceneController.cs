@@ -3,13 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class DynamicSceneController : MonoBehaviour {
-    
-    public struct NamedImage
-    {
-        public string name;
-        public Texture2D image;
-    }
-    public NamedImage pictures;
+
+    public DataStorage.SceneType sceneType;
+    public int sceneId;
 
     // Use this for initialization
     void Start () {

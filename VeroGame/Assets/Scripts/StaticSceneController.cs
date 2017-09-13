@@ -9,16 +9,11 @@ public class StaticSceneController : MonoBehaviour {
 	public int sceneId;
     public GameObject background;
 
-    void Awake()
-    {
-        spawnBackground();
-        spawnTriggers();
-    }
-
     // Use this for initialization
     void Start () 
 	{
-        
+        LoadBackground();
+        spawnTriggers();
     }
 	
 	// Update is called once per frame
@@ -42,18 +37,18 @@ public class StaticSceneController : MonoBehaviour {
 
 	public void ChangeScene(string sceneName)
 	{
-		SceneManager.LoadScene(sceneName);	
+		SceneManager.LoadScene("Scenes/" + sceneName);	
 	}
 
-    public void spawnBackground()
+    public void LoadBackground()
     {
         Instantiate(background);
     }
 
     public void spawnTriggers()
     {
-        string sceneName = "TODO - get current scene name";
-        List<DataStorage.SceneTrigger> sceneTriggerList = DataStorage.getSceneTrigger_ofScene(sceneName);
+        Scene scene = SceneManager.GetActiveScene();
+        List<DataStorage.SceneTrigger> sceneTriggerList = DataStorage.getSceneTrigger_ofScene(scene.name);
 
         foreach(DataStorage.SceneTrigger sceneTrigger in sceneTriggerList)
         {
