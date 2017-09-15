@@ -1,104 +1,200 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using System.IO;
 
-public class DataStorage : MonoBehaviour {
+public class DataStorage : MonoBehaviour
+{
+    [Serializable]
+    public class CenaAtual
+    {
+        [Serializable]
+        public class ObjetosCena
+        {
+            public int positionX;
+            public int positionY;
+            public int dimensionX;
+            public int dimensionY;
+            public string gameObjectPath;
+        }
 
-    public enum SceneType
-	{
-		PROCESSO,
-		NIVEL,
-		CASE
-	}
+        [Serializable]
+        public class Jogador
+        {
+            public int positionX;
+            public int positionY;
+            public int dimensionX;
+            public int dimensionY;
+            public string gameObjectPath;
+        }
+
+        public Processo[] listaProcesso;
+        public Nivel[] listaNivel;
+        public Case[] listaCase;
+        public SceneTrigger[] listaSceneTrigger;
+        public string cenaNome;
+        public string background;
+        public ObjetosCena[] objetosCena;
+        public Jogador jogador;
+    }
 
     [Serializable]
     public class Processo
     {
-        int id;
-        string nome;
+        public int id;
+        public string nome;
     }
 
     [Serializable]
     public class Nivel
     {
-        int id;
-        string nome;
+        public int id;
+        public string nome;
     }
 
     [Serializable]
     public class Case
     {
-        int id;
-        string nome;
+        public int id;
+        public string nome;
+        public Pergunta[] listaPergunta;
+
+        public List<Pergunta> getPerguntasValidas()
+        {
+            List<Pergunta> perguntasValidas = new List<Pergunta>();
+
+            foreach(Pergunta pergunta in listaPergunta)
+            {
+                if (pergunta.listaUsuarioResposta.Length != 0)
+                    perguntasValidas.Add(pergunta);
+            }
+
+            return perguntasValidas;
+        }
     }
 
     [Serializable]
     public class Pergunta
     {
-        int id;
-        string texto;
-        Resposta[] respostas;
+        public int id;
+        public string texto;
+        public Resposta[] listaResposta;
+        public UsuarioResposta[] listaUsuarioResposta;
+
+        public List<Resposta> getRespostas()
+        {
+            List<Resposta> respostas = new List<Resposta>();
+
+            foreach (Resposta resposta in listaResposta)
+            {
+                respostas.Add(resposta);
+            }
+
+            return respostas;
+        }
+
+        public List<UsuarioResposta> getUsuarioRespostas()
+        {
+            List<UsuarioResposta> usuarioRespostas = new List<UsuarioResposta>();
+
+            foreach (UsuarioResposta usuarioResposta in listaUsuarioResposta)
+            {
+                usuarioRespostas.Add(usuarioResposta);
+            }
+
+            return usuarioRespostas;
+        }
     }
 
     [Serializable]
     public class Resposta
     {
-        int id;
-        string texto;
+        public int id;
+        public string texto;
     }
 
     [Serializable]
     public class UsuarioResposta
     {
-        int respostaId;
-        int caseId;
+        public int respostaId;
+        public int caseId;
     }
 
     [Serializable]
     public class SceneTrigger
     {
-        public string originScene;
-        public string targetScene;
-        public int id;
+        public int sceneId;
         public float x;
         public float y;
         public float altura;
         public float largura;
     }
 
-    static Dictionary<int, SceneTrigger> sceneTriggerStorage = new Dictionary<int, SceneTrigger>();
+    public static CenaAtual cenaAtual;
 
     void Awake()
     {
-        SceneTrigger sceneTrigger = JsonUtility.FromJson<SceneTrigger>("{\"originScene\":\"SceneDefault\",\"targetScene\":\"Teste\",\"id\":1,\"x'\":0,\"y\":0,\"altura\":200,\"largura\":200}");
-        sceneTriggerStorage.Add(1, sceneTrigger);
+        DontDestroyOnLoad(gameObject);
     }
 
     // Use this for initialization
-    void Start () {
-		DontDestroyOnLoad(gameObject);
-    }
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
-
-    public static List<SceneTrigger> getSceneTrigger_ofScene(string sceneName)
+    void Start()
     {
-        List<SceneTrigger> sceneTriggerList = new List<SceneTrigger>();
-        //TODO - retornar a lista com as sceneTrigger cuja originScene é sceneName
-        Dictionary<int, SceneTrigger>.KeyCollection keys = sceneTriggerStorage.Keys;
+        
+    }
 
-        print(keys.Count);
-        foreach (int key in keys)
-        {
-            SceneTrigger sceneTrigger = sceneTriggerStorage[key];
-            print(sceneTrigger.id);
-            if (sceneTrigger.originScene == sceneName)
-                sceneTriggerList.Add(sceneTrigger);
-        }
+    // Update is called once per frame
+    void Update()
+    {
 
-        return sceneTriggerList;
+    }
+
+    public static void LoadCenaData()
+    {
+        string json = System.IO.File.ReadAllText(GameController.getEtapaFileString());
+
+        cenaAtual = JsonUtility.FromJson<CenaAtual>(json);
+    }
+
+    public static SceneTrigger[] getAllSceneTrigger()
+    {
+        return cenaAtual.listaSceneTrigger;
+    }
+
+    public static string getCenaNome()
+    {
+        return cenaAtual.cenaNome;
+    }
+
+    public static Processo getProcesso(int id)
+    {
+        foreach(Processo processo in cenaAtual.listaProcesso)
+            if (processo.id == id)
+                return processo;
+
+        return null;
+    }
+
+    public static Nivel getNivel(int id)
+    {
+        foreach (Nivel nivel in cenaAtual.listaNivel)
+            if (nivel.id == id)
+                return nivel;
+
+        return null;
+    }
+
+    public static Case getCase(int id)
+    {
+        foreach (Case _case in cenaAtual.listaCase)
+            if (_case.id == id)
+                return _case;
+
+        return null;
+    }
+
+    public static CenaAtual.ObjetosCena[] getObjetosCena()
+    {
+        return cenaAtual.objetosCena;
     }
 }

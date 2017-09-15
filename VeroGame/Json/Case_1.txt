@@ -1,0 +1,8 @@
+{
+"listaProcesso":[], 
+"listaNivel":[], 
+"listaCase":[], 
+"listaUsuarioResposta":[], 
+"cenaNome":"CenaCase",
+"background":"FundoTeste"
+}

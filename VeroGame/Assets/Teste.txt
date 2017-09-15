@@ -1,0 +1,11 @@
+{
+"listaProcesso":[], 
+"listaNivel":[], 
+"listaCase":[], 
+"listaUsuarioResposta":[], 
+"listaSceneTrigger": 
+	[
+		{"originScene":"SceneDefault","targetScene":"Teste","id":1,"x'":0,"y":0,"altura":200,"largura":200},
+		{"originScene":"SceneDefault","targetScene":"Teste","id":2,"x'":200,"y":300,"altura":100,"largura":100}
+	]
+}

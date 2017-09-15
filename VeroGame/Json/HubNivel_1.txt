@@ -1,0 +1,14 @@
+{
+"listaProcesso":[], 
+"listaNivel":[], 
+"listaCase":[], 
+"listaUsuarioResposta":[], 
+"listaSceneTrigger":[],
+"cenaNome":"CenaTopDown",
+"background":"",
+"objetosCena":
+	[
+		{"positionX":0,"positionY":0,"dimensionX":10,"dimensionY":10,"gameObjectPath":"FundoTeste"},
+		{"positionX":10,"positionY":10,"dimensionX":5,"dimensionY":5,"gameObjectPath":"FundoTeste"}
+	]
+}
