@@ -7,14 +7,19 @@ public class TopDownConroller : MonoBehaviour {
     GameObject background;
     GameObject jogador;
 
-    int[,] mapaMatrix;
-    Vector2 mapaSize;
+	Mapa mapa;
 
 	// Use this for initialization
 	void Start () {
         LoadBackground();
         LoadObjetos();
-        printMapaMatrix();
+        mapa.printMapaMatrix();
+		Mapa.AStar_Node node = mapa.AStar(new Mapa.Position(0, 0), new Mapa.Position(13, 13));
+		List<Mapa.Position> caminho = node.gerarCaminho();
+		foreach(Mapa.Position pos in caminho)
+		{
+			print("{ " + pos.x + " , " + pos.y + " }");
+		}
     }
 	
 	// Update is called once per frame
@@ -29,7 +34,7 @@ public class TopDownConroller : MonoBehaviour {
         {
             Instantiate(background);
         }
-        InitializeMapaMatrix(new Vector2(20, 20));//TODO - encontrar o tamanho do mapa baseado no tile size e o size do background
+		mapa = new Mapa(new Vector2(20, 20));//TODO - encontrar o tamanho do mapa baseado no tile size e o size do background
     }
 
     public void LoadObjetos()
@@ -51,40 +56,7 @@ public class TopDownConroller : MonoBehaviour {
         }
     }
 
-    public void InitializeMapaMatrix(Vector2 mapaSize)
-    {
-        this.mapaSize = mapaSize;
-        mapaMatrix = new int[(int)mapaSize.x, (int)mapaSize.y];
-
-        for (int x = 0; x < (int)mapaSize.x; x++)
-        {
-            for (int y = 0; y < (int)mapaSize.y; y++)
-            {
-                mapaMatrix[x, y] = 0;
-            }
-        }
-    }
-
-    public int[,] getMapaMatrix()
-    {
-        return mapaMatrix;
-    }
-
-    public void printMapaMatrix()
-    {
-        string line = "";
-
-        for (int x = 0; x < (int)mapaSize.x; x++)
-        {
-            for (int y = 0; y < (int)mapaSize.y; y++)
-            {
-                line += "\t" + mapaMatrix[x, y];
-            }
-            print(line);
-            line = "";
-        }
-    }
-
+    
     public void createObjeto(string gameObjectPath, Vector2 position, Vector2 dimension)
     {
         GameObject objeto = Resources.Load(gameObjectPath) as GameObject;
@@ -99,7 +71,7 @@ public class TopDownConroller : MonoBehaviour {
         {
             for (int y = (int)position.y; y < (int)(position.y + dimension.y); y++)
             {
-                mapaMatrix[x, y] = 1;
+                mapa.matrix[x, y] = -1;
             }
         }
     }
