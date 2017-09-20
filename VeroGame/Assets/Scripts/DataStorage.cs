@@ -15,6 +15,7 @@ public class DataStorage : MonoBehaviour
             public int positionY;
             public int dimensionX;
             public int dimensionY;
+            public int sceneId = 0;
             public string gameObjectPath;
         }
 

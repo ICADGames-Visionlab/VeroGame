@@ -17,8 +17,7 @@ public class MapaController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () 
 	{
-		GameObject lastObjectOnMouse = null;
-		lastObjectOnMouse = ObjectMouseOver();
+		GameObject lastObjectOnMouse = ObjectMouseOver();
 
         if (Input.GetMouseButtonDown(0))
             if (lastObjectOnMouse != null)

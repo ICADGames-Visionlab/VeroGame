@@ -5,22 +5,81 @@ using UnityEngine;
 public class IsometricController : MonoBehaviour {
 
     GameObject background;
+    Mapa.Jogador jogador;
 
-    int[,] mapaMatrix;
-    Vector2 mapaSize;
+    Mapa mapa;
 
     // Use this for initialization
     void Start()
     {
         LoadBackground();
         LoadObjetos();
-        printMapaMatrix();
+        LoadJogador();
     }
 
     // Update is called once per frame
-    void Update () {
-		
-	}
+    void Update()
+    {
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            Vector3 cordenadaMundo = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Mapa.Position cordenadaMapa = getCordenadaMapa(cordenadaMundo);
+
+            /*Mapa.AStar_Node destino = mapa.AStar(jogador.position, cordenadaMapa);
+            List<Mapa.Position> caminho = destino.gerarCaminho();
+            jogador.gerarPlano(caminho);*/
+        }
+
+        if (Input.GetKeyDown(KeyCode.UpArrow))
+        {
+            jogador.adicionarAcao(Mapa.Jogador.Acao.CIMA);
+        }
+        if (Input.GetKeyDown(KeyCode.DownArrow))
+        {
+            jogador.adicionarAcao(Mapa.Jogador.Acao.BAIXO);
+        }
+        if (Input.GetKeyDown(KeyCode.LeftArrow))
+        {
+            jogador.adicionarAcao(Mapa.Jogador.Acao.ESQUERDA);
+        }
+        if (Input.GetKeyDown(KeyCode.RightArrow))
+        {
+            jogador.adicionarAcao(Mapa.Jogador.Acao.DIREITA);
+        }
+
+        if (Input.GetKeyDown(KeyCode.W))
+        {
+            jogador.adicionarAcao(Mapa.Jogador.Acao.CIMA);
+        }
+        if (Input.GetKeyDown(KeyCode.S))
+        {
+            jogador.adicionarAcao(Mapa.Jogador.Acao.BAIXO);
+        }
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            jogador.adicionarAcao(Mapa.Jogador.Acao.ESQUERDA);
+        }
+        if (Input.GetKeyDown(KeyCode.D))
+        {
+            jogador.adicionarAcao(Mapa.Jogador.Acao.DIREITA);
+        }
+
+        if (Input.GetKeyDown(KeyCode.P))
+            print("{ " + jogador.position.x + " , " + jogador.position.y + " }");
+
+        if (jogador != null)
+        {
+            jogador.doProximaAcao();
+            atualizarJogador();
+
+            int proximaEtapa = mapa.isProgressao(jogador.position);
+            if (proximaEtapa > 0)
+            {
+                GameController.ProgredirEtapa(proximaEtapa);
+            }
+        }
+    }
 
     public void LoadBackground()
     {
@@ -29,73 +88,70 @@ public class IsometricController : MonoBehaviour {
         {
             Instantiate(background);
         }
-        InitializeMapaMatrix(new Vector2(20, 20));//TODO - encontrar o tamanho do mapa baseado no tile size e o size do background
-    }
-
-    public void InitializeMapaMatrix(Vector2 mapaSize)
-    {
-        this.mapaSize = mapaSize;
-        mapaMatrix = new int[(int)mapaSize.x, (int)mapaSize.y];
-
-        for (int x = 0; x < (int)mapaSize.x; x++)
-        {
-            for (int y = 0; y < (int)mapaSize.y; y++)
-            {
-                mapaMatrix[x, y] = 0;
-            }
-        }
-    }
-
-    public int[,] getMapaMatrix()
-    {
-        return mapaMatrix;
-    }
-
-    public void printMapaMatrix()
-    {
-        string line = "";
-
-        for (int x = 0; x < (int)mapaSize.x; x++)
-        {
-            for (int y = 0; y < (int)mapaSize.y; y++)
-            {
-                line += "\t" + mapaMatrix[x, y];
-            }
-            print(line);
-            line = "";
-        }
+        mapa = new Mapa(new Vector2(20, 20));//TODO - encontrar o tamanho do mapa baseado no tile size e o size do background
     }
 
     public void LoadObjetos()
     {
         foreach (DataStorage.CenaAtual.ObjetosCena cenaObjeto in DataStorage.getObjetosCena())
         {
-            createObjeto(cenaObjeto.gameObjectPath, new Vector2(cenaObjeto.positionX, cenaObjeto.positionY), new Vector2(cenaObjeto.dimensionX, cenaObjeto.dimensionY));
+            createObjeto(cenaObjeto);
         }
     }
 
-    public void createObjeto(string gameObjectPath, Vector2 position, Vector2 dimension)
+    public void LoadJogador()
     {
-        GameObject objeto = Resources.Load(gameObjectPath) as GameObject;
+        GameObject jogador = Resources.Load(DataStorage.cenaAtual.jogador.gameObjectPath) as GameObject;
+        Mapa.Position jogadorPos = new Mapa.Position(DataStorage.cenaAtual.jogador.positionX, DataStorage.cenaAtual.jogador.positionY);
+        if (jogador != null)
+        {
+            jogador = Instantiate(jogador);
+
+            this.jogador = new Mapa.Jogador(jogador, jogadorPos, mapa);
+
+            this.jogador.gameObject.transform.position = getCordenadaMundo(this.jogador.position);
+        }
+    }
+
+
+    public void createObjeto(DataStorage.CenaAtual.ObjetosCena cenaObjeto)
+    {
+        Mapa.Position position = new Mapa.Position(cenaObjeto.positionX, cenaObjeto.positionY);
+        Vector2 dimension = new Vector2(cenaObjeto.dimensionX, cenaObjeto.dimensionY);
+        GameObject objeto = Resources.Load(cenaObjeto.gameObjectPath) as GameObject;
         if (objeto != null)
         {
             objeto = Instantiate(objeto);
-            objeto.transform.position = getTransformedPosition(position);
+            objeto.transform.position = getCordenadaMundo(position);
 
         }
 
-        for (int x = (int)position.x; x < (int)(position.x + dimension.x); x++)
+        for (int x = position.x; x < (int)(position.x + dimension.x); x++)
         {
-            for (int y = (int)position.y; y < (int)(position.y + dimension.y); y++)
+            for (int y = position.y; y < (int)(position.y + dimension.y); y++)
             {
-                mapaMatrix[x, y] = 1;
+                if (cenaObjeto.sceneId != 0)
+                    mapa.matrix[x, y] = cenaObjeto.sceneId;
+                else
+                    mapa.matrix[x, y] = -1;
             }
         }
     }
 
-    public Vector3 getTransformedPosition(Vector2 position)
+    public void atualizarJogador()
+    {
+        jogador.gameObject.transform.position = getCordenadaMundo(jogador.position);
+    }
+
+    public Vector3 getCordenadaMundo(Mapa.Position position)
     {
         //TODO - tranformar posição matrix em cordenadas do mundo
         return new Vector3(position.x, position.y, 1);
+    }
+
+    public Mapa.Position getCordenadaMapa(Vector3 position)
+    {
+        //TODO - tranformar posição mundo em posicao matrix
+        return new Mapa.Position((int)position.x, (int)position.y);
     }
 }

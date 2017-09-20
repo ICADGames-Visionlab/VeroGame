@@ -5,9 +5,10 @@
 "listaUsuarioResposta":[], 
 "listaSceneTrigger":[],
 "cenaNome":"CenaTopDown",
-"background":"",
+"background":"FundoTeste",
 "objetosCena":
 	[
-		{"positionX":1,"positionY":1,"dimensionX":10,"dimensionY":10,"gameObjectPath":"FundoTeste"}
-	]
+		{"positionX":1,"positionY":1,"dimensionX":1,"dimensionY":1,"sceneId":1}
+	],
+"jogador":{"positionX":0,"positionY":0,"dimensionX":1,"dimensionY":1,"gameObjectPath":"Jogador"}
 }
