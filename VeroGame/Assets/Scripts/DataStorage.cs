@@ -78,6 +78,10 @@ public class DataStorage : MonoBehaviour
     public class Pergunta
     {
         public int id;
+        public int positionX;
+        public int positionY;
+        public int dimensionX;
+        public int dimensionY;
         public string texto;
         public Resposta[] listaResposta;
         public UsuarioResposta[] listaUsuarioResposta;
@@ -112,6 +116,12 @@ public class DataStorage : MonoBehaviour
     {
         public int id;
         public string texto;
+        public int tipo;
+        public int positionX;
+        public int positionY;
+        public int dimensionX;
+        public int dimensionY;
+        public string marcadorPath;
     }
 
     [Serializable]

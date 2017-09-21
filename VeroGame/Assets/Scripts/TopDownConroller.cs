@@ -89,7 +89,7 @@ public class TopDownConroller : MonoBehaviour {
         if (background != null)
         {
             background = Instantiate(background);
-            background.transform.position = new Vector3(background.transform.position.x, background.transform.position.y, 1);
+            background.transform.position = new Vector3(background.transform.position.x, background.transform.position.y, 2);
         }
 		mapa = new Mapa(new Vector2(20, 20));//TODO - encontrar o tamanho do mapa baseado no tile size e o size do background
     }
