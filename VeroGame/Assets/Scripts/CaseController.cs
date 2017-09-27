@@ -32,9 +32,10 @@ public class CaseController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        //LoadBackground();
-        //caseAtual = DataStorage.getCase(GameController.getEtapaId());
-        //perguntasCase = caseAtual.getPerguntasValidas();
+        LoadBackground();
+        caseAtual = DataStorage.getCase(GameController.getEtapaId());
+        perguntasCase = caseAtual.getPerguntasValidas();
+        print(perguntasCase.Count);
     }
 	
 	// Update is called once per frame
@@ -66,7 +67,7 @@ public class CaseController : MonoBehaviour {
     {
         List<DataStorage.Resposta> respostas = pergunta.getRespostas();
 
-        LoadText(new Vector3(pergunta.positionX, pergunta.positionY, 1), new Vector2(pergunta.dimensionX, pergunta.dimensionY), pergunta.texto);
+        LoadText(new Vector3(pergunta.x, pergunta.y, 1), new Vector2(pergunta.largura, pergunta.altura), pergunta.texto);
 
         foreach (DataStorage.Resposta resposta in respostas)
         {
@@ -76,9 +77,9 @@ public class CaseController : MonoBehaviour {
 
     public void LoadResposta(DataStorage.Resposta resposta)
     {
-        LoadText(new Vector3(resposta.positionX, resposta.positionY, 1), new Vector2(resposta.dimensionX, resposta.dimensionY), resposta.texto);
+        LoadText(new Vector3(resposta.x, resposta.y, 1), new Vector2(resposta.largura, resposta.altura), resposta.texto);
 
-        LoadMarcadorResposta(new Vector3(resposta.positionX, resposta.positionY, 1), new Vector2(resposta.dimensionX, resposta.dimensionY), resposta.id, 1, false, resposta.marcadorPath);
+        LoadMarcadorResposta(new Vector3(resposta.x, resposta.y, 1), new Vector2(resposta.largura, resposta.altura), resposta.id, 1, false, resposta.marcadorPath);
     }
 
     public void LoadMarcadorResposta(Vector3 position, Vector2 dimension, int respostaId, int indice, bool marcado, string gameObjectPath)

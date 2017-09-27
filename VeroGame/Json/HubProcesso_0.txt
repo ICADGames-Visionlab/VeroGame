@@ -5,7 +5,7 @@
 "listaUsuarioResposta":[], 
 "listaSceneTrigger": 
 	[
-		{"sceneId":1,"x'":0,"y":0,"altura":200,"largura":200}
+		{"sceneId":1,"x":0,"y":0,"altura":200,"largura":200}
 	],
 "cenaNome":"CenaMapa",
 "background":"FundoTeste"

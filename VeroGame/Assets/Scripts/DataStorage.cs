@@ -11,10 +11,10 @@ public class DataStorage : MonoBehaviour
         [Serializable]
         public class ObjetosCena
         {
-            public int positionX;
-            public int positionY;
-            public int dimensionX;
-            public int dimensionY;
+            public int x;
+            public int y;
+            public int largura;
+            public int altura;
             public int sceneId = 0;
             public string gameObjectPath;
         }
@@ -22,10 +22,10 @@ public class DataStorage : MonoBehaviour
         [Serializable]
         public class Jogador
         {
-            public int positionX;
-            public int positionY;
-            public int dimensionX;
-            public int dimensionY;
+            public int x;
+            public int y;
+            public int largura;
+            public int altura;
             public string gameObjectPath;
         }
 
@@ -66,7 +66,7 @@ public class DataStorage : MonoBehaviour
 
             foreach(Pergunta pergunta in listaPergunta)
             {
-                if (pergunta.listaUsuarioResposta.Length != 0)
+                if (pergunta.listaUsuarioResposta.Length == 0)
                     perguntasValidas.Add(pergunta);
             }
 
@@ -78,10 +78,10 @@ public class DataStorage : MonoBehaviour
     public class Pergunta
     {
         public int id;
-        public int positionX;
-        public int positionY;
-        public int dimensionX;
-        public int dimensionY;
+        public int x;
+        public int y;
+        public int largura;
+        public int altura;
         public string texto;
         public Resposta[] listaResposta;
         public UsuarioResposta[] listaUsuarioResposta;
@@ -117,10 +117,10 @@ public class DataStorage : MonoBehaviour
         public int id;
         public string texto;
         public int tipo;
-        public int positionX;
-        public int positionY;
-        public int dimensionX;
-        public int dimensionY;
+        public int x;
+        public int y;
+        public int largura;
+        public int altura;
         public string marcadorPath;
     }
 

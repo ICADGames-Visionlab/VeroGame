@@ -41,7 +41,6 @@ public class GameController : MonoBehaviour {
         else if (caseId == 0) caseId = novaEtapaId;
         DataStorage.LoadCenaData();
         SceneManager.LoadScene(DataStorage.getCenaNome());
-        print(getEtapa());
     }
 
     public static void RegredirEtapa()

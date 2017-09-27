@@ -1,7 +1,25 @@
 {
 "listaProcesso":[], 
 "listaNivel":[], 
-"listaCase":[], 
+"listaCase":
+	 [
+		{"id":1,"nome":"pergunta 1","listaPergunta":
+			[
+				{"id":1,"x":1,"y":1,"altura":1,"largura":1,"texto":"essa pergunta","listaResposta":
+					[
+						{"id":1,"x":1,"y":1,"altura":1,"largura":1,"texto":"essa pergunta","tipo":1,"marcadorPath":"nada"},
+						{"id":2,"x":1,"y":1,"altura":1,"largura":1,"texto":"essa pergunta","tipo":1,"marcadorPath":"nada"},
+						{"id":3,"x":1,"y":1,"altura":1,"largura":1,"texto":"essa pergunta","tipo":1,"marcadorPath":"nada"},
+						{"id":4,"x":1,"y":1,"altura":1,"largura":1,"texto":"essa pergunta","tipo":1,"marcadorPath":"nada"}
+					],
+				"listaUsuarioResposta":
+					[
+					
+					]
+				}
+			]
+		}
+	], 
 "listaUsuarioResposta":[], 
 "cenaNome":"CenaCase",
 "background":"FundoTeste"

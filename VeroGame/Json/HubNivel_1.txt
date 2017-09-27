@@ -1,14 +1,12 @@
 {
 "listaProcesso":[], 
 "listaNivel":[], 
-"listaCase":[], 
+"listaCase":[],
 "listaUsuarioResposta":[], 
-"listaSceneTrigger":[],
-"cenaNome":"CenaTopDown",
-"background":"FundoTeste",
-"objetosCena":
+"listaSceneTrigger": 
 	[
-		{"positionX":1,"positionY":1,"dimensionX":1,"dimensionY":1,"sceneId":1}
+		{"sceneId":1,"x":0,"y":0,"altura":200,"largura":200}
 	],
-"jogador":{"positionX":0,"positionY":0,"dimensionX":1,"dimensionY":1,"gameObjectPath":"Jogador"}
+"cenaNome":"CenaMapa",
+"background":"FundoTeste"
 }
