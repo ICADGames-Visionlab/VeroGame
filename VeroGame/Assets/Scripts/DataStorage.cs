@@ -205,7 +205,7 @@ public class DataStorage : MonoBehaviour
     }
 
     public static CenaAtual.ObjetosCena[] getObjetosCena()
-    {
+    { 
         return cenaAtual.objetosCena;
     }
 }

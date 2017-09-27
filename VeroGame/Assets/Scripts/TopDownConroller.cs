@@ -96,10 +96,14 @@ public class TopDownConroller : MonoBehaviour {
 
     public void LoadObjetos()
     {
-        foreach (DataStorage.CenaAtual.ObjetosCena cenaObjeto in DataStorage.getObjetosCena())
+        if(DataStorage.getObjetosCena() != null)
         {
-            createObjeto(cenaObjeto);
+            foreach (DataStorage.CenaAtual.ObjetosCena cenaObjeto in DataStorage.getObjetosCena())
+            {
+                createObjeto(cenaObjeto);
+            }
         }
+        
     }
 
     public void LoadJogador()
