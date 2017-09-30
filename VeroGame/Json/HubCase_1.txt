@@ -7,6 +7,11 @@
 	[
 		{"sceneId":1,"x":0,"y":0,"altura":200,"largura":200}
 	],
-"cenaNome":"CenaMapa",
-"background":"FundoTeste"
+"objetosCena":
+	[
+		{"x":1,"y":1,"largura":10,"altura":10,"sceneId":1}
+	],
+"cenaNome":"CenaTopDown",
+"background":"FundoTeste",
+"jogador":{"x":0,"y":0,"largura":100,"altura":100,"gameObjectPath":"Jogador"}
 }

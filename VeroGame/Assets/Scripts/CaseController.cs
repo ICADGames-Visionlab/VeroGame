@@ -17,6 +17,8 @@ public class CaseController : MonoBehaviour {
             this.indice = indice;
             this.marcado = marcado;
             this.gameObject = gameObject;
+
+            this.gameObject.GetComponent<Animator>().SetBool("marcado", marcado);
         }
     }
 
@@ -31,15 +33,23 @@ public class CaseController : MonoBehaviour {
     List<MarcadorResposta> marcadoresList = new List<MarcadorResposta>();
     GameObject btProximo;
 
-    int indexPerguntaAtual = -1;
+    int indexPerguntaAtual = 0;
 
 	// Use this for initialization
 	void Start () {
-        LoadBackground();
         caseAtual = DataStorage.getCase(GameController.getEtapaId());
         perguntasCase = caseAtual.getPerguntasValidas();
-        //btProximo = LoadBotaoProximo(new Vector3(1, 1, 1), new Vector2(1, 1), "teste");
-        ProximaPergunta();
+
+        if (perguntasCase.Count == 0)
+        {
+            GameController.RegredirEtapa();
+            return;
+        }
+            
+        LoadBackground();
+        LoadPergunta(perguntasCase[indexPerguntaAtual]);
+
+        btProximo = LoadBotaoProximo(new Vector3(perguntasCase[indexPerguntaAtual].btOK_X, perguntasCase[indexPerguntaAtual].btOK_Y, -1), new Vector2(1, 1), perguntasCase[indexPerguntaAtual].btOK_Path);
     }
 	
 	// Update is called once per frame
@@ -57,7 +67,7 @@ public class CaseController : MonoBehaviour {
                 }
                 else
                 {
-                    MarcadorResposta marcadorClicado = getMarcadorResposta(gameObject);
+                    MarcadorResposta marcadorClicado = getMarcadorResposta(lastObjectOnMouse);
                     SelecionarMarcador(marcadorClicado);
                 }
             }
@@ -100,7 +110,9 @@ public class CaseController : MonoBehaviour {
         {
             if(marcador.marcado)
             {
-
+                DataStorage.UsuarioResposta resposta = new DataStorage.UsuarioResposta(marcador.respostaId, caseAtual.id, marcador.indice);
+                string repostaJson = JsonUtility.ToJson(resposta);
+                DataStorage.salvarResposta(resposta);
             }
         }
     }
@@ -113,15 +125,19 @@ public class CaseController : MonoBehaviour {
 
         foreach (DataStorage.Resposta resposta in respostas)
         {
-            LoadResposta(resposta);
+            LoadResposta(resposta, pergunta.tipo);
         }
     }
 
-    public void LoadResposta(DataStorage.Resposta resposta)
+    public void LoadResposta(DataStorage.Resposta resposta, int tipoPergunta)
     {
         LoadText(new Vector3(resposta.x, resposta.y, 1), new Vector2(resposta.largura, resposta.altura), resposta.texto);
 
-        //LoadMarcadorResposta(new Vector3(resposta.x, resposta.y, 1), new Vector2(resposta.largura, resposta.altura), resposta.id, 1, false, resposta.marcadorPath);
+        if(tipoPergunta == 1)
+        {
+            LoadMarcadorResposta(new Vector3(resposta.marcadorX[0], resposta.marcadorY[0], -1), new Vector2(resposta.largura, resposta.altura), resposta.id, 1, false, resposta.marcadorPath);
+            LoadMarcadorResposta(new Vector3(resposta.marcadorX[1], resposta.marcadorY[1], -1), new Vector2(resposta.largura, resposta.altura), resposta.id, 2, false, resposta.marcadorPath);
+        }
     }
 
     public void LoadMarcadorResposta(Vector3 position, Vector2 dimension, int respostaId, int indice, bool marcado, string gameObjectPath)
@@ -130,11 +146,11 @@ public class CaseController : MonoBehaviour {
 
         GameObject instance = Instantiate(prefab);
         instance.transform.position = position;
-        instance.transform.localScale = dimension;
+        //instance.transform.localScale = dimension;
 
-        AddCollider(instance, new Vector3(dimension.x, dimension.y, 1));
+        //AddCollider(instance, new Vector3(dimension.x, dimension.y, 1));
 
-        MarcadorResposta marcador = new MarcadorResposta(respostaId, indice, marcado, instance);
+        MarcadorResposta marcador = new MarcadorResposta(respostaId, indice, false, instance);
 
         marcadoresList.Add(marcador);
     }
@@ -145,9 +161,9 @@ public class CaseController : MonoBehaviour {
 
         GameObject instance = Instantiate(prefab);
         instance.transform.position = position;
-        instance.transform.localScale = dimension;
+        //instance.transform.localScale = dimension;
 
-        AddCollider(instance, new Vector3(dimension.x, dimension.y, 1));
+        //AddCollider(instance, new Vector3(dimension.x, dimension.y, 1));
         return instance;
     }
 
@@ -210,12 +226,20 @@ public class CaseController : MonoBehaviour {
         foreach (MarcadorResposta marcador in marcadoresList)
         {
             if (marcador.indice == marcadorAtual.indice)
+            {
                 marcador.marcado = false;
+                marcador.gameObject.GetComponent<Animator>().SetBool("marcado", false);
+            }
             else if (marcador.respostaId == marcadorAtual.respostaId)
+            {
                 marcador.marcado = false;
+                marcador.gameObject.GetComponent<Animator>().SetBool("marcado", false);
+            }
+                
         }
 
         marcadorAtual.marcado = true;
+        marcadorAtual.gameObject.GetComponent<Animator>().SetBool("marcado", true);
     }
 
     public MarcadorResposta getMarcadorResposta(int respostaId, int indice)

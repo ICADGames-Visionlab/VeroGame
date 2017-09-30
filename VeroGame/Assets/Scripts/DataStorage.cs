@@ -66,8 +66,12 @@ public class DataStorage : MonoBehaviour
 
             foreach(Pergunta pergunta in listaPergunta)
             {
-                if (pergunta.listaUsuarioResposta.Length == 0)
+                if (pergunta.listaUsuarioResposta.Length == 0 && isRespostaRegistrada(pergunta.listaResposta))
+                {
+
                     perguntasValidas.Add(pergunta);
+                }
+                    
             }
 
             return perguntasValidas;
@@ -82,9 +86,13 @@ public class DataStorage : MonoBehaviour
         public int y;
         public int largura;
         public int altura;
+        public int tipo;
         public string texto;
         public Resposta[] listaResposta;
         public UsuarioResposta[] listaUsuarioResposta;
+        public string btOK_Path;
+        public int btOK_X;
+        public int btOK_Y;
 
         public List<Resposta> getRespostas()
         {
@@ -116,12 +124,13 @@ public class DataStorage : MonoBehaviour
     {
         public int id;
         public string texto;
-        public int tipo;
         public int x;
         public int y;
         public int largura;
         public int altura;
         public string marcadorPath;
+        public int[] marcadorX;
+        public int[] marcadorY;
     }
 
     [Serializable]
@@ -129,6 +138,14 @@ public class DataStorage : MonoBehaviour
     {
         public int respostaId;
         public int caseId;
+        public int tipo;
+
+        public UsuarioResposta(int respostaId, int caseId, int tipo)
+        {
+            this.respostaId = respostaId;
+            this.caseId = caseId;
+            this.tipo = tipo;
+        }
     }
 
     [Serializable]
@@ -142,6 +159,7 @@ public class DataStorage : MonoBehaviour
     }
 
     public static CenaAtual cenaAtual;
+    public static List<UsuarioResposta> respostasResgistradas = new List<UsuarioResposta>();
 
     void Awake()
     {
@@ -165,6 +183,40 @@ public class DataStorage : MonoBehaviour
         string json = System.IO.File.ReadAllText(GameController.getEtapaFileString());
 
         cenaAtual = JsonUtility.FromJson<CenaAtual>(json);
+    }
+
+    public static void salvarResposta(UsuarioResposta resposta)
+    {
+        respostasResgistradas.Add(resposta);
+    }
+
+    public static List<UsuarioResposta> getRespostaRegistrada(int respostaId, int caseId)
+    {
+        List<UsuarioResposta> respostas = new List<UsuarioResposta>();
+
+        foreach(UsuarioResposta resposta in respostasResgistradas)
+        {
+            if(resposta.respostaId == respostaId && resposta.caseId == caseId)
+            {
+                respostas.Add(resposta);
+            }
+        }
+
+        return respostas;
+    }
+
+    public static bool isRespostaRegistrada(Resposta[] listaResposta)
+    {
+        foreach (UsuarioResposta usuarioResposta in respostasResgistradas)
+        {
+            foreach(Resposta resposta in listaResposta)
+            {
+                if (usuarioResposta.respostaId == resposta.id)
+                    return false;
+            }
+        }
+
+        return true;
     }
 
     public static SceneTrigger[] getAllSceneTrigger()

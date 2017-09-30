@@ -32,14 +32,9 @@ sysinfo.txt
 # Builds
 *.apk
 *.unitypackage
-/VeroGame/Assets/*.meta
-/VeroGame/Assets/Images/*.meta
 /VeroGame/Library/metadata/*
 /VeroGame/Library/metadata/51
 /VeroGame/Library/metadata/19
-/VeroGame/Assets/Prefabs/*.meta
-/VeroGame/Assets/Scenes/*.meta
-/VeroGame/Assets/Scripts/*.meta
 /VeroGame/Library/*.db
 /VeroGame/Library/ScriptAssemblies/*.dll
 /VeroGame/Library/ScriptAssemblies/*.mdb

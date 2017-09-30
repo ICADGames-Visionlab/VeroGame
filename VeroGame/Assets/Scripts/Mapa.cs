@@ -39,6 +39,8 @@ public class Mapa : MonoBehaviour {
         public Position position;
         public List<Acao> plano;
         public Mapa mapa;
+        public bool movendo;
+        public float velocidade = 10;
 
         public void OnDestroy()
         {
@@ -51,7 +53,6 @@ public class Mapa : MonoBehaviour {
             this.position = position;
             this.mapa = mapa;
             plano = new List<Acao>();
-            Camera.main.transform.parent = gameObject.transform;
         }
 
         public void adicionarAcao(Acao acao)
@@ -78,9 +79,9 @@ public class Mapa : MonoBehaviour {
                     else if (xDif == -1)
                         novoPlano.Add(Jogador.Acao.DIREITA);
                     else if (yDif == 1)
-                        novoPlano.Add(Jogador.Acao.CIMA);
-                    else if (yDif == -1)
                         novoPlano.Add(Jogador.Acao.BAIXO);
+                    else if (yDif == -1)
+                        novoPlano.Add(Jogador.Acao.CIMA);
                 }
             }
 
@@ -99,31 +100,37 @@ public class Mapa : MonoBehaviour {
             }
         }
 
-        public void doProximaAcao()
+        public Position getProximaAcaoDestino()
         {
             Acao acao = getProximaAcao();
 
             switch (acao)
             {
                 case Acao.VAZIO:
-                    return;
+                    return null;
                 case Acao.CIMA:
-                    if ( mapa.isAndavel( new Position(position.x, position.y - 1) ) )
-                        position.y = position.y - 1;
-                    return;
-                case Acao.BAIXO:
                     if ( mapa.isAndavel( new Position(position.x, position.y + 1) ) )
-                        position.y = position.y + 1;
-                    return;
+                        return new Position(position.x, position.y + 1);
+                    else
+                        return null;
+                case Acao.BAIXO:
+                    if ( mapa.isAndavel( new Position(position.x, position.y - 1) ) )
+                        return new Position(position.x, position.y - 1);
+                    else
+                        return null;
                 case Acao.DIREITA:
                     if ( mapa.isAndavel( new Position(position.x + 1, position.y) ) )
-                        position.x = position.x + 1;
-                    return;
+                        return new Position(position.x + 1, position.y);
+                    else
+                        return null;
                 case Acao.ESQUERDA:
                     if ( mapa.isAndavel( new Position(position.x - 1, position.y) ) )
-                        position.x = position.x - 1;
-                    return;
+                        return new Position(position.x - 1, position.y);
+                    else
+                        return null;
             }
+
+            return null;
         }
     }
 

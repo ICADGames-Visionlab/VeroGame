@@ -70,8 +70,11 @@ public class SideScollerController : MonoBehaviour {
 
         if (jogador != null)
         {
-            jogador.doProximaAcao();
-            atualizarJogador();
+            Mapa.Position destino = jogador.getProximaAcaoDestino();
+            if (destino != null)
+                MoveTo(jogador, jogador.position, destino);
+
+            //atualizarJogador();
 
             int proximaEtapa = mapa.isProgressao(jogador.position);
             if (proximaEtapa > 0)
@@ -136,6 +139,15 @@ public class SideScollerController : MonoBehaviour {
                     mapa.matrix[x, y] = -1;
             }
         }
+    }
+
+    public void MoveTo(Mapa.Jogador jogador, Mapa.Position origem, Mapa.Position destino)
+    {
+        Vector3 origemMundo = getCordenadaMundo(origem);
+        Vector3 destinoMundo = getCordenadaMundo(destino);
+
+        Vector2 movementVector = new Vector2(Mathf.Abs(destinoMundo.x - origemMundo.x), Mathf.Abs(destinoMundo.y - origemMundo.y));
+        print(movementVector);
     }
 
     public void atualizarJogador()

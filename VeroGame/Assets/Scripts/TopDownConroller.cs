@@ -8,9 +8,10 @@ public class TopDownConroller : MonoBehaviour {
     Mapa.Jogador jogador;
 
 	Mapa mapa;
+    Mapa.Position destino;
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start () {
         LoadBackground();
         LoadObjetos();
         LoadJogador();
@@ -72,8 +73,27 @@ public class TopDownConroller : MonoBehaviour {
 
         if (jogador != null)
         {
-            jogador.doProximaAcao();
-            atualizarJogador();
+            if(!jogador.movendo)
+            {
+                destino = jogador.getProximaAcaoDestino();
+            }
+
+            if(destino != null)
+            {
+                jogador.movendo = true;
+                Vector2 movementVector = new Vector2(getCordenadaMundo(destino).x - getCordenadaMundo(jogador.position).x, getCordenadaMundo(destino).y - getCordenadaMundo(jogador.position).y);
+                jogador.gameObject.transform.position = new Vector3(jogador.gameObject.transform.position.x + movementVector.x / jogador.velocidade, jogador.gameObject.transform.position.y + movementVector.y / jogador.velocidade, jogador.gameObject.transform.position.z);
+                //jogador.gameObject.transform.position = Vector3.Lerp(jogador.gameObject.transform.position, getCordenadaMundo(destino), 0.1F);
+
+                if (jogador.gameObject.transform.position == getCordenadaMundo(destino))
+                {
+                    jogador.movendo = false;
+                    jogador.position = destino;
+                    jogador.gameObject.transform.position = getCordenadaMundo(jogador.position);
+                }
+            }
+
+            //atualizarJogador();
 
             int proximaEtapa = mapa.isProgressao(jogador.position);
             if (proximaEtapa > 0)
@@ -143,6 +163,14 @@ public class TopDownConroller : MonoBehaviour {
                     mapa.matrix[x, y] = -1;
             }
         }
+    }
+
+    public void MoveTo(Mapa.Position origem, Mapa.Position destino)
+    {
+        Vector3 origemMundo = getCordenadaMundo(origem);
+        Vector3 destinoMundo = getCordenadaMundo(destino);
+
+        Vector2 movementVector = new Vector2(Mathf.Abs(destinoMundo.x - origemMundo.x), Mathf.Abs(destinoMundo.y - origemMundo.y));
     }
 
     public void atualizarJogador()
