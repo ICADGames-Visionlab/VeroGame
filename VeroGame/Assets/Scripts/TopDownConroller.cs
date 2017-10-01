@@ -129,7 +129,7 @@ public class TopDownConroller : MonoBehaviour {
     public void LoadJogador()
     {
         GameObject jogador = Resources.Load(DataStorage.cenaAtual.jogador.gameObjectPath) as GameObject;
-        Mapa.Position jogadorPos = new Mapa.Position(DataStorage.cenaAtual.jogador.x, DataStorage.cenaAtual.jogador.y);
+        Mapa.Position jogadorPos = new Mapa.Position((int)DataStorage.cenaAtual.jogador.x, (int)DataStorage.cenaAtual.jogador.y);
         if (jogador != null)
         {
             jogador = Instantiate(jogador);
@@ -143,7 +143,7 @@ public class TopDownConroller : MonoBehaviour {
     
     public void createObjeto(DataStorage.CenaAtual.ObjetosCena cenaObjeto)
     {
-        Mapa.Position position = new Mapa.Position(cenaObjeto.x, cenaObjeto.y);
+        Mapa.Position position = new Mapa.Position((int)cenaObjeto.x, (int)cenaObjeto.y);
         Vector2 dimension = new Vector2(cenaObjeto.largura, cenaObjeto.altura);
         GameObject objeto = Resources.Load(cenaObjeto.gameObjectPath) as GameObject;
         if (objeto != null)

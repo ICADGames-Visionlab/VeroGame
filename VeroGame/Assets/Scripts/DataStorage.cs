@@ -11,10 +11,10 @@ public class DataStorage : MonoBehaviour
         [Serializable]
         public class ObjetosCena
         {
-            public int x;
-            public int y;
-            public int largura;
-            public int altura;
+            public float x;
+            public float y;
+            public float largura;
+            public float altura;
             public int sceneId = 0;
             public string gameObjectPath;
         }
@@ -22,10 +22,10 @@ public class DataStorage : MonoBehaviour
         [Serializable]
         public class Jogador
         {
-            public int x;
-            public int y;
-            public int largura;
-            public int altura;
+            public float x;
+            public float y;
+            public float largura;
+            public float altura;
             public string gameObjectPath;
         }
 
@@ -82,17 +82,17 @@ public class DataStorage : MonoBehaviour
     public class Pergunta
     {
         public int id;
-        public int x;
-        public int y;
-        public int largura;
-        public int altura;
+        public float x;
+        public float y;
+        public float largura;
+        public float altura;
         public int tipo;
         public string texto;
         public Resposta[] listaResposta;
         public UsuarioResposta[] listaUsuarioResposta;
         public string btOK_Path;
-        public int btOK_X;
-        public int btOK_Y;
+        public float btOK_X;
+        public float btOK_Y;
 
         public List<Resposta> getRespostas()
         {
@@ -124,13 +124,13 @@ public class DataStorage : MonoBehaviour
     {
         public int id;
         public string texto;
-        public int x;
-        public int y;
-        public int largura;
-        public int altura;
+        public float x;
+        public float y;
+        public float largura;
+        public float altura;
         public string marcadorPath;
-        public int[] marcadorX;
-        public int[] marcadorY;
+        public float[] marcadorX;
+        public float[] marcadorY;
     }
 
     [Serializable]

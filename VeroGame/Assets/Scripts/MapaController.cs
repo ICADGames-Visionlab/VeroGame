@@ -68,7 +68,8 @@ public class MapaController : MonoBehaviour {
         GameObject trigger = new GameObject(cenaId.ToString());
 
         BoxCollider collider = trigger.AddComponent<BoxCollider>();
-        collider.center = center;
+        trigger.transform.position = center;
+        collider.center = new Vector3(0, 0, 0);
         collider.size = size;
     }
 }
