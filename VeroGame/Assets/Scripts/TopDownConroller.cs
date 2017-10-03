@@ -111,7 +111,16 @@ public class TopDownConroller : MonoBehaviour {
             background = Instantiate(background);
             background.transform.position = new Vector3(background.transform.position.x, background.transform.position.y, 2);
         }
-		mapa = new Mapa(new Vector2(20, 20));//TODO - encontrar o tamanho do mapa baseado no tile size e o size do background
+		mapa = new Mapa(new Vector2(19, 11));//TODO - encontrar o tamanho do mapa baseado no tile size e o size do background
+        GameObject tileInstance = Resources.Load("block") as GameObject;
+        for (int x = 0; x < (int)mapa.size.x; x++)
+        {
+            for (int y = 0; y < (int)mapa.size.y; y++)
+            {
+                Vector3 cordMundo = getCordenadaMundo(new Mapa.Position(x, y));
+                DrawRectangle(new Rect(cordMundo.x, cordMundo.y, 1, 1));
+            }
+        }
     }
 
     public void LoadObjetos()
@@ -129,7 +138,7 @@ public class TopDownConroller : MonoBehaviour {
     public void LoadJogador()
     {
         GameObject jogador = Resources.Load(DataStorage.cenaAtual.jogador.gameObjectPath) as GameObject;
-        Mapa.Position jogadorPos = new Mapa.Position(DataStorage.cenaAtual.jogador.x, DataStorage.cenaAtual.jogador.y);
+        Mapa.Position jogadorPos = new Mapa.Position((int)DataStorage.cenaAtual.jogador.x, (int)DataStorage.cenaAtual.jogador.y);
         if (jogador != null)
         {
             jogador = Instantiate(jogador);
@@ -143,7 +152,7 @@ public class TopDownConroller : MonoBehaviour {
     
     public void createObjeto(DataStorage.CenaAtual.ObjetosCena cenaObjeto)
     {
-        Mapa.Position position = new Mapa.Position(cenaObjeto.x, cenaObjeto.y);
+        Mapa.Position position = new Mapa.Position((int)cenaObjeto.x, (int)cenaObjeto.y);
         Vector2 dimension = new Vector2(cenaObjeto.largura, cenaObjeto.altura);
         GameObject objeto = Resources.Load(cenaObjeto.gameObjectPath) as GameObject;
         if (objeto != null)
@@ -181,12 +190,35 @@ public class TopDownConroller : MonoBehaviour {
     public Vector3 getCordenadaMundo(Mapa.Position position)
     {
         //TODO - tranformar posição matrix em cordenadas do mundo
-        return new Vector3(position.x, position.y, 1);
+        Vector3 cordMundo = new Vector3(position.x - 9, position.y - 5 + (position.x * 0.2f), -2);
+        return cordMundo;
     }
 
     public Mapa.Position getCordenadaMapa(Vector3 position)
     {
         //TODO - tranformar posição mundo em posicao matrix
-        return new Mapa.Position((int)position.x, (int)position.y);
+        return new Mapa.Position((int)position.x + 9, (int)position.y + 5);
+    }
+
+    //---------DEUBG-----------
+    void DrawRectangle(Rect rectangle)
+    {
+        DrawLine(new Vector3(rectangle.x, rectangle.y, 1), new Vector3(rectangle.x + rectangle.width, rectangle.y, 1), Color.black);
+        DrawLine(new Vector3(rectangle.x, rectangle.y, 1), new Vector3(rectangle.x, rectangle.y + rectangle.height, 1), Color.black);
+        DrawLine(new Vector3(rectangle.x, rectangle.y + rectangle.height, 1), new Vector3(rectangle.x + rectangle.width, rectangle.y + rectangle.height, 1), Color.black);
+        DrawLine(new Vector3(rectangle.x + rectangle.width, rectangle.y, 1), new Vector3(rectangle.x + rectangle.width, rectangle.y + rectangle.height, 1), Color.black);
+    }
+
+    void DrawLine(Vector3 start, Vector3 end, Color color)
+    {
+        GameObject myLine = new GameObject();
+        myLine.transform.position = start;
+        myLine.AddComponent<LineRenderer>();
+        LineRenderer lr = myLine.GetComponent<LineRenderer>();
+        //lr.material = new Material(Shader.Find("Particles/Alpha Blended Premultiply"));
+        lr.SetColors(color, color);
+        lr.SetWidth(0.05f, 0.05f);
+        lr.SetPosition(0, start);
+        lr.SetPosition(1, end);
     }
 }

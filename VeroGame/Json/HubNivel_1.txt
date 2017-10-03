@@ -5,9 +5,9 @@
 "listaUsuarioResposta":[], 
 "listaSceneTrigger": 
 	[
-		{"sceneId":1,"x":0,"y":0,"altura":200,"largura":200}
+		{"sceneId":1,"x":-2.636,"y":1.253,"altura":200,"largura":200,"triggerPath":"Empresa"}
 	],
 "cenaNome":"CenaMapa",
-"background":"FundoTeste",
+"background":"mapaCidade",
 "jogador":{"x":0,"y":0,"largura":100,"altura":100,"gameObjectPath":"Jogador"}
 }

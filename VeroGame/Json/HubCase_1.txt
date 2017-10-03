@@ -9,9 +9,9 @@
 	],
 "objetosCena":
 	[
-		{"x":1,"y":1,"largura":10,"altura":10,"sceneId":1}
+		{"x":5,"y":5,"largura":1,"altura":1,"sceneId":1}
 	],
 "cenaNome":"CenaTopDown",
-"background":"FundoTeste",
+"background":"mapaIsometrico",
 "jogador":{"x":0,"y":0,"largura":100,"altura":100,"gameObjectPath":"Jogador"}
 }

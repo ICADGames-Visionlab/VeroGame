@@ -13,15 +13,27 @@ public class MapaController : MonoBehaviour {
         LoadBackground();
         spawnTriggers();
     }
+
+    List<GameObject> sceneTriggerList = new List<GameObject>();
 	
 	// Update is called once per frame
 	void Update () 
 	{
 		GameObject lastObjectOnMouse = ObjectMouseOver();
 
-        if (Input.GetMouseButtonDown(0))
-            if (lastObjectOnMouse != null)
+        if (lastObjectOnMouse != null)
+        {
+            lastObjectOnMouse.GetComponent<Animator>().SetBool("selecionado", true);
+            if (Input.GetMouseButtonDown(0))
                 GameController.ProgredirEtapa(int.Parse(lastObjectOnMouse.name));
+        }
+        else
+        {
+            foreach(GameObject gameObject in sceneTriggerList)
+            {
+                gameObject.GetComponent<Animator>().SetBool("selecionado", false);
+            }
+        }
 	}
 
     public void LoadBackground()
@@ -44,7 +56,7 @@ public class MapaController : MonoBehaviour {
                 Vector3 center = new Vector3(sceneTrigger.x, sceneTrigger.y, 0);
                 Vector3 size = new Vector3(sceneTrigger.altura, sceneTrigger.largura, 1);
 
-                CreateSceneTrigger(sceneTrigger.sceneId, center, size);
+                CreateSceneTrigger(sceneTrigger.sceneId, center, size, sceneTrigger.triggerPath);
             }
         }
         
@@ -63,12 +75,18 @@ public class MapaController : MonoBehaviour {
 		return null;
 	}
 
-    public void CreateSceneTrigger(int cenaId, Vector3 center, Vector3 size)
+    public void CreateSceneTrigger(int cenaId, Vector3 center, Vector3 size, string gameObjectPath)
     {
-        GameObject trigger = new GameObject(cenaId.ToString());
+        GameObject prefabInstance = Resources.Load(gameObjectPath) as GameObject;
 
-        BoxCollider collider = trigger.AddComponent<BoxCollider>();
-        collider.center = center;
-        collider.size = size;
+        GameObject instance = Instantiate(prefabInstance);
+        instance.name = cenaId.ToString();
+        instance.transform.position = center;
+
+        sceneTriggerList.Add(instance);
+
+        //BoxCollider collider = instance.AddComponent<BoxCollider>();
+        //collider.center = center;
+        //collider.size = size;
     }
 }
