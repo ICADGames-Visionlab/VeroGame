@@ -121,7 +121,7 @@ public class CaseController : MonoBehaviour {
     {
         List<DataStorage.Resposta> respostas = pergunta.getRespostas();
 
-        LoadText(new Vector3(pergunta.x, pergunta.y, 3), new Vector2(pergunta.largura, pergunta.altura), pergunta.texto);
+        LoadText(new Vector3(pergunta.x, pergunta.y, -2), new Vector2(pergunta.largura, pergunta.altura), pergunta.texto);
 
         foreach (DataStorage.Resposta resposta in respostas)
         {
@@ -131,7 +131,7 @@ public class CaseController : MonoBehaviour {
 
     public void LoadResposta(DataStorage.Resposta resposta, int tipoPergunta)
     {
-        LoadText(new Vector3(resposta.x, resposta.y, 1), new Vector2(resposta.largura, resposta.altura), resposta.texto);
+        LoadText(new Vector3(resposta.x, resposta.y, -2), new Vector2(resposta.largura, resposta.altura), resposta.texto);
 
         if(tipoPergunta == 1)
         {

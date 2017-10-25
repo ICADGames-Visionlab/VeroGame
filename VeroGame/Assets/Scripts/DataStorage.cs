@@ -156,6 +156,7 @@ public class DataStorage : MonoBehaviour
         public float y;
         public float altura;
         public float largura;
+        public string triggerPath;
     }
 
     public static CenaAtual cenaAtual;
