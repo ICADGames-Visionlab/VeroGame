@@ -4,6 +4,28 @@ using UnityEngine;
 
 public class IsometricController : MonoBehaviour {
 
+    public static class Isomatrix
+    {
+        public static class Projection
+        {
+            public static float r = 1;
+            public static float dx = 0.2f;
+            public static float dy = 1.1f;
+        }
+
+        public static class Tile
+        {
+            public static float width = 29;
+            public static float height = 29;
+        }
+
+        public static class Position
+        {
+            public static float x = 626;
+            public static float y = -12;
+        }
+    }
+
     GameObject background;
     Mapa.Jogador jogador;
 
@@ -165,5 +187,45 @@ public class IsometricController : MonoBehaviour {
     {
         //TODO - tranformar posição mundo em posicao matrix
         return new Mapa.Position((int)position.x, (int)position.y);
+    }
+
+    public Vector2 IsometricToMatrix(Vector3 position)
+    {
+        Vector2 point = new Vector2(0, 0);
+
+        point.x = (Isomatrix.Projection.r * (Isomatrix.Projection.r + Isomatrix.Projection.dy) * position.y + (Isomatrix.Projection.r + Isomatrix.Projection.dx) * position.x) / (Mathf.Pow(Isomatrix.Projection.r, 2) + 1);
+        point.y = (-Isomatrix.Projection.r * (Isomatrix.Projection.r + Isomatrix.Projection.dx) * position.x + (Isomatrix.Projection.r + Isomatrix.Projection.dy) * position.y) / (Mathf.Pow(Isomatrix.Projection.r, 2) + 1);
+
+        return point;
+    }
+
+    public Vector3 MatrixToIsometric(Vector2 position)
+    {
+        Vector3 point = new Vector3(0, 0, 1);
+
+        point.x = ((position.x - position.y * Isomatrix.Projection.r) / (Isomatrix.Projection.r + Isomatrix.Projection.dx));
+        point.y = ((position.y + position.x * Isomatrix.Projection.r) / (Isomatrix.Projection.r + Isomatrix.Projection.dy));
+
+        return point;
+    }
+
+    public Vector2 MatrixToPoint(Mapa.Position position)
+    {
+        Vector2 point = new Vector2(0, 0);
+
+        point.x = Isomatrix.Position.x + position.x * Isomatrix.Tile.width;
+        point.y = Isomatrix.Position.y + position.y * Isomatrix.Tile.height;
+
+        return point;
+    }
+
+    public Mapa.Position PointToMatrix(Vector2 position)
+    {
+        Mapa.Position point = new Mapa.Position(0, 0);
+
+        point.x = (int)Mathf.Floor((position.x - Isomatrix.Position.x) / Isomatrix.Tile.width);
+        point.y = (int)Mathf.Floor((position.y - Isomatrix.Projection.r) / Isomatrix.Tile.height);
+
+        return point;
     }
 }

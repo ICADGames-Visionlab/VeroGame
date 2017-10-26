@@ -3,15 +3,12 @@
 "listaNivel":[], 
 "listaCase":[],
 "listaUsuarioResposta":[], 
-"listaSceneTrigger": 
-	[
-		{"sceneId":1,"x":0,"y":0,"altura":200,"largura":200}
-	],
 "objetosCena":
 	[
-		{"x":5,"y":5,"largura":1,"altura":1,"sceneId":1}
+		{"x":10,"y":5,"largura":1,"altura":1,"sceneId":1},
+		{"x":0,"y":0,"largura":2,"altura":2}
 	],
 "cenaNome":"CenaTopDown",
 "background":"mapaIsometrico",
-"jogador":{"x":0,"y":0,"largura":100,"altura":100,"gameObjectPath":"Jogador"}
+"jogador":{"x":2,"y":2,"largura":100,"altura":100,"gameObjectPath":"Jogador"}
 }

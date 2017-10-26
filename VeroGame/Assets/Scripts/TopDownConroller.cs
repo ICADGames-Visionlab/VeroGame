@@ -5,6 +5,28 @@ using UnityEngine;
 public class TopDownConroller : MonoBehaviour
 {
 
+    public static class Isomatrix
+    {
+        public static class Projection
+        {
+            public static float r = 1;
+            public static float dx = 0.2f;
+            public static float dy = 1.1f;
+        }
+
+        public static class Tile
+        {
+            public static float width = 0.5f;
+            public static float height = 0.5f;
+        }
+
+        public static class Position
+        {
+            public static float x = -3.5f;
+            public static float y = -3.5f;
+        }
+    }
+
     GameObject background;
     Mapa.Jogador jogador;
 
@@ -20,7 +42,7 @@ public class TopDownConroller : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
 
         if (Input.GetMouseButtonDown(0))
@@ -28,16 +50,7 @@ public class TopDownConroller : MonoBehaviour
             Vector3 cordenadaMundo = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             Mapa.Position cordenadaMapa = getCordenadaMapa(cordenadaMundo);
 
-            GameObject ellipse1 = GameObject.Find("Ellipse 1");
-            ellipse1.transform.SetPositionAndRotation(new Vector3(cordenadaMundo.x, cordenadaMundo.y, 0), ellipse1.transform.rotation);
-
-            GameObject ellipse2 = GameObject.Find("Ellipse 2");
-            ellipse2.transform.SetPositionAndRotation(new Vector3(cordenadaMapa.x, cordenadaMapa.y, 0), ellipse2.transform.rotation);
-
-
-
-
-            if (mapa.inMatrix(cordenadaMapa))
+            if (mapa.inMatrix(cordenadaMapa) && mapa.isAndavel(cordenadaMapa))
             {
                 Mapa.AStar_Node destino = mapa.AStar(jogador.position, cordenadaMapa);
                 List<Mapa.Position> caminho = destino.gerarCaminho();
@@ -87,26 +100,31 @@ public class TopDownConroller : MonoBehaviour
         {
             if (!jogador.movendo)
             {
+                Vector3 jogadorSize = jogador.gameObject.GetComponent<Renderer>().bounds.size;
+                jogador.gameObject.transform.position = getCordenadaMundo(jogador.position) + (new Vector3(0, jogadorSize.y, 0) / 2.7f);
                 destino = jogador.getProximaAcaoDestino();
             }
 
             if (destino != null)
             {
                 jogador.movendo = true;
+
+                Vector3 jogadorSize = jogador.gameObject.GetComponent<Renderer>().bounds.size;
+                Vector3 velocity = Vector3.zero;
+                Vector3 newDest = (new Vector3(0, jogadorSize.y, 0) / 2.7f) + getCordenadaMundo(destino);
                 Vector2 movementVector = new Vector2(getCordenadaMundo(destino).x - getCordenadaMundo(jogador.position).x, getCordenadaMundo(destino).y - getCordenadaMundo(jogador.position).y);
 
-                jogador.gameObject.transform.position = new Vector3(jogador.gameObject.transform.position.x + movementVector.x / jogador.velocidade, jogador.gameObject.transform.position.y + movementVector.y / jogador.velocidade, jogador.gameObject.transform.position.z);
-                //jogador.gameObject.transform.position = Vector3.Lerp(jogador.gameObject.transform.position, getCordenadaMundo(destino), 0.1F);
+                //jogador.gameObject.transform.position = new Vector3(jogador.gameObject.transform.position.x + movementVector.x / jogador.velocidade, jogador.gameObject.transform.position.y + movementVector.y / jogador.velocidade, jogador.gameObject.transform.position.z);
+                jogador.gameObject.transform.position = Vector3.SmoothDamp(jogador.gameObject.transform.position, newDest, ref velocity, 0.023f);
+                
 
-                if (jogador.gameObject.transform.position == getCordenadaMundo(destino))
+                if (jogador.gameObject.transform.position == newDest)
                 {
                     jogador.movendo = false;
                     jogador.position = destino;
-                    jogador.gameObject.transform.position = getCordenadaMundo(jogador.position);
+                    //jogador.gameObject.transform.position = getCordenadaMundo(jogador.position) + (new Vector3(0, jogadorSize.y, 0) / 2.7f);
                 }
             }
-
-            //atualizarJogador();
 
             int proximaEtapa = mapa.isProgressao(jogador.position);
             if (proximaEtapa > 0)
@@ -124,17 +142,35 @@ public class TopDownConroller : MonoBehaviour
             background = Instantiate(background);
             background.transform.position = new Vector3(background.transform.position.x, background.transform.position.y, 2);
         }
-        mapa = new Mapa(new Vector2(20, 100));//TODO - encontrar o tamanho do mapa baseado no tile size e o size do background
-        GameObject tileInstance = Resources.Load("block") as GameObject;
+        mapa = new Mapa(new Vector2(11, 11));//TODO - encontrar o tamanho do mapa baseado no tile size e o size do background
 
-
-        for (int x = -(int)mapa.size.x; x < (int)mapa.size.x; x++)
+        /*for (int x = 0; x < (int)mapa.size.x; x++)
         {
             for (int y = 0; y < (int)mapa.size.y; y++)
             {
-                DrawRectangle(0.245f, x, y, new Vector2(-9.161f, -5.096f));
+                float px = Isomatrix.Position.x + x * Isomatrix.Tile.width;
+                float py = Isomatrix.Position.y + y * Isomatrix.Tile.height;
+
+                float vx1 = px;float vy1 = py;
+                float vx2 = px;float vy2 = py + Isomatrix.Tile.height;
+
+                float hx1 = px;float hy1 = py;
+                float hx2 = px + Isomatrix.Tile.width;float hy2 = py;
+
+                Vector2 point_vx1;
+                Vector2 point_vx2;
+                point_vx1 = PointToIsometric(new Vector2(vx1, vy1));
+                point_vx2 = PointToIsometric(new Vector2(vx2, vy2));
+
+                Vector2 point_hx1;
+                Vector2 point_hx2;
+                point_hx1 = PointToIsometric(new Vector2(hx1, hy1));
+                point_hx2 = PointToIsometric(new Vector2(hx2, hy2));
+
+                DrawLine(new Vector3(point_vx1.x, point_vx1.y, 1), new Vector3(point_vx2.x, point_vx2.y, 1), Color.black);
+                DrawLine(new Vector3(point_hx1.x, point_hx1.y, 1), new Vector3(point_hx2.x, point_hx2.y, 1), Color.black);
             }
-        }
+        }*/
         //DrawRectangle(1, 0, 0, new Vector2(3.023f, 1.915f));
     }
 
@@ -160,7 +196,9 @@ public class TopDownConroller : MonoBehaviour
 
             this.jogador = new Mapa.Jogador(jogador, jogadorPos, mapa);
 
-            this.jogador.gameObject.transform.position = getCordenadaMundo(this.jogador.position);
+            Vector3 jogadorSize = jogador.GetComponent<Renderer>().bounds.size;
+
+            this.jogador.gameObject.transform.position = getCordenadaMundo(this.jogador.position) + new Vector3(0, jogadorSize.y, 0) / 2.7f ;
         }
     }
 
@@ -197,28 +235,62 @@ public class TopDownConroller : MonoBehaviour
         Vector2 movementVector = new Vector2(Mathf.Abs(destinoMundo.x - origemMundo.x), Mathf.Abs(destinoMundo.y - origemMundo.y));
     }
 
-    public void atualizarJogador()
-    {
-        jogador.gameObject.transform.position = getCordenadaMundo(jogador.position);
-    }
-
     public Vector3 getCordenadaMundo(Mapa.Position position)
     {
-        //TODO - tranformar posição matrix em cordenadas do mundo
-        // Vector3 cordMundo = new Vector3(position.x - 9, position.y - 5 + (position.x * 0.2f), -2);
-        Vector3 cordMundo = new Vector3(position.x - 9, position.y - 5, -2);
-        return cordMundo;
+        Vector2 temp = MatrixToPoint(new Vector2(position.x, position.y));
+        return PointToIsometric(temp);
     }
 
     public Mapa.Position getCordenadaMapa(Vector3 position)
     {
-        //TODO - tranformar posição mundo em posicao matrix
-        return new Mapa.Position((int)position.x + 9, (int)position.y + 5);
+        Vector2 temp = IsometricToPoint(position);
+        temp = PointToMatrix(temp);
+        return new Mapa.Position((int)temp.x, (int)temp.y + 9);
+    }
+
+    public Vector2 IsometricToPoint(Vector3 position)
+    {
+        Vector2 point = new Vector2(0, 0);
+
+        point.x = (Isomatrix.Projection.r * (Isomatrix.Projection.r + Isomatrix.Projection.dy) * position.y + (Isomatrix.Projection.r + Isomatrix.Projection.dx) * position.x) / (Mathf.Pow(Isomatrix.Projection.r, 2) + 1);
+        point.y = (-Isomatrix.Projection.r * (Isomatrix.Projection.r + Isomatrix.Projection.dx) * position.x + (Isomatrix.Projection.r + Isomatrix.Projection.dy) * position.y) / (Mathf.Pow(Isomatrix.Projection.r, 2) + 1);
+
+        return point;
+    }
+
+    public Vector3 PointToIsometric(Vector2 position)
+    {
+        Vector3 point = new Vector3(0, 0, 1);
+
+        point.x = ((position.x - position.y * Isomatrix.Projection.r) / (Isomatrix.Projection.r + Isomatrix.Projection.dx));
+        point.y = ((position.y + position.x * Isomatrix.Projection.r) / (Isomatrix.Projection.r + Isomatrix.Projection.dy));
+
+        return point;
+    }
+
+    public Vector2 MatrixToPoint(Vector2 position)
+    {
+        Vector2 point = new Vector2(0, 0);
+
+        point.x = Isomatrix.Position.x + position.x * Isomatrix.Tile.width;
+        point.y = Isomatrix.Position.y + position.y * Isomatrix.Tile.height;
+
+        return point;
+    }
+
+    public Vector2 PointToMatrix(Vector2 position)
+    {
+        Vector2 point = new Vector2(0, 0);
+
+        point.x = Mathf.Floor((position.x - Isomatrix.Position.x) / Isomatrix.Tile.width);
+        point.y = Mathf.Floor((position.y - Isomatrix.Projection.r) / Isomatrix.Tile.height);
+
+        return point;
     }
 
     //---------DEUBG-----------
     //void DrawRectangle(Rect rectangle)
-    void DrawRectangle(float size, int x, int y, Vector2 pos)
+    /*void DrawRectangle(float size, int x, int y, Vector2 pos)
     {
 
         
@@ -233,39 +305,19 @@ public class TopDownConroller : MonoBehaviour
                 new Vector3(pos.x + x * wisze + ((y + 1) * ang_size), pos.y + (y - 1) * size, 1),
                 Color.black);
 
-
-        //left ) + ((y + 1) * ang_size)
-        //(((x + 1) * size) + ((y + 1) * ang_size)
         DrawLine(new Vector3(pos.x + x * wisze + ((y) * ang_size),  pos.y + (y) * size, 1), 
                          new Vector3(pos.x + x * wisze + ((y + 1) * ang_size),  pos.y + (y + 1) * size, 1),
                          Color.black);
-                         
-        /*
-        float factor = 2f;
 
-        float start_x_left = pos.x + ((x / size) + (y / size)) / factor;
-        float start_y_left = pos.y + ((y / size) -  (x  / size)) / factor;
+    }*/
 
-        float end_x_left = pos.x + ((x / size) + ((y + 1)  / size)) / factor;
-        float end_y_left = pos.y + (((y + 1) / size) - ((x ) / size)) / factor;
-        
-
-        float start_x_bottom = pos.x + ((x / size) + (y  / size)) / factor;
-        float start_y_bottom = pos.y + ((y / size) - (x  / size)) / factor;
-
-        float end_x_bottom = pos.x + (((x + 1) / size) + (y  / size)) / factor;
-        float end_y_bottom = pos.y + ((y / size) - ((x + 1)  / size)) / factor;
-
-        //left
-        DrawLine(new Vector3(start_x_left, start_y_left, 1), new Vector3(end_x_left, end_y_left, 1), Color.black);
-
-        //bottom
-        DrawLine(new Vector3(start_x_bottom, start_y_bottom, 1), new Vector3(end_x_bottom, end_y_bottom, 1), Color.black);
-
-        */
-
-
-    }
+     void DrawRectangle(Rect rectangle)
+     {
+         DrawLine(new Vector3(rectangle.x, rectangle.y, 1), new Vector3(rectangle.x + rectangle.width, rectangle.y, 1), Color.black);
+         DrawLine(new Vector3(rectangle.x, rectangle.y, 1), new Vector3(rectangle.x, rectangle.y + rectangle.height, 1), Color.black);
+         DrawLine(new Vector3(rectangle.x, rectangle.y + rectangle.height, 1), new Vector3(rectangle.x + rectangle.width, rectangle.y + rectangle.height, 1), Color.black);
+         DrawLine(new Vector3(rectangle.x + rectangle.width, rectangle.y, 1), new Vector3(rectangle.x + rectangle.width, rectangle.y + rectangle.height, 1), Color.black);
+     }
 
     void DrawLine(Vector3 start, Vector3 end, Color color)
     {
@@ -279,4 +331,5 @@ public class TopDownConroller : MonoBehaviour
         lr.SetPosition(0, start);
         lr.SetPosition(1, end);
     }
+
 }
