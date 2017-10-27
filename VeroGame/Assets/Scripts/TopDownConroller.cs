@@ -103,19 +103,24 @@ public class TopDownConroller : MonoBehaviour
                 Vector3 jogadorSize = jogador.gameObject.GetComponent<Renderer>().bounds.size;
                 jogador.gameObject.transform.position = getCordenadaMundo(jogador.position) + (new Vector3(0, jogadorSize.y, 0) / 2.7f);
                 destino = jogador.getProximaAcaoDestino();
+                if(destino == null)
+                    jogador.gameObject.GetComponent<Animator>().SetBool("IsWalking", false);
             }
 
             if (destino != null)
             {
                 jogador.movendo = true;
+                jogador.gameObject.GetComponent<Animator>().SetBool("IsWalking", true);
 
                 Vector3 jogadorSize = jogador.gameObject.GetComponent<Renderer>().bounds.size;
                 Vector3 velocity = Vector3.zero;
                 Vector3 newDest = (new Vector3(0, jogadorSize.y, 0) / 2.7f) + getCordenadaMundo(destino);
-                Vector2 movementVector = new Vector2(getCordenadaMundo(destino).x - getCordenadaMundo(jogador.position).x, getCordenadaMundo(destino).y - getCordenadaMundo(jogador.position).y);
+
+                Vector2 movementVector = new Vector2(newDest.x - getCordenadaMundo(jogador.position).x, newDest.y - getCordenadaMundo(jogador.position).y);
+                print(movementVector);
 
                 //jogador.gameObject.transform.position = new Vector3(jogador.gameObject.transform.position.x + movementVector.x / jogador.velocidade, jogador.gameObject.transform.position.y + movementVector.y / jogador.velocidade, jogador.gameObject.transform.position.z);
-                jogador.gameObject.transform.position = Vector3.SmoothDamp(jogador.gameObject.transform.position, newDest, ref velocity, 0.023f);
+                jogador.gameObject.transform.position = Vector3.SmoothDamp(jogador.gameObject.transform.position, newDest, ref velocity, 0.022f);
                 
 
                 if (jogador.gameObject.transform.position == newDest)
@@ -142,7 +147,7 @@ public class TopDownConroller : MonoBehaviour
             background = Instantiate(background);
             background.transform.position = new Vector3(background.transform.position.x, background.transform.position.y, 2);
         }
-        mapa = new Mapa(new Vector2(11, 11));//TODO - encontrar o tamanho do mapa baseado no tile size e o size do background
+        mapa = new Mapa(new Vector2(10, 10));//TODO - encontrar o tamanho do mapa baseado no tile size e o size do background
 
         /*for (int x = 0; x < (int)mapa.size.x; x++)
         {

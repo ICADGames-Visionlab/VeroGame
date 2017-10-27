@@ -32,7 +32,11 @@ public class Mapa : MonoBehaviour {
             CIMA,
             BAIXO,
             ESQUERDA,
-            DIREITA
+            DIREITA,
+            EC,
+            EB,
+            DC,
+            DB
         }
 
         public GameObject gameObject;
@@ -73,14 +77,23 @@ public class Mapa : MonoBehaviour {
                 int xDif = lastPos.x - positionAtual.x;
                 int yDif = lastPos.y - positionAtual.y;
 
-                if (xDif == 1)
+                if (xDif == 1 && yDif == 0)
                     novoPlano.Add(Jogador.Acao.ESQUERDA);
-                else if (xDif == -1)
+                else if (xDif == -1 && yDif == 0)
                     novoPlano.Add(Jogador.Acao.DIREITA);
-                else if (yDif == 1)
+                else if (yDif == 1 && xDif == 0)
                     novoPlano.Add(Jogador.Acao.BAIXO);
-                else if (yDif == -1)
+                else if (yDif == -1 && xDif == 0)
                     novoPlano.Add(Jogador.Acao.CIMA);
+
+                else if (xDif == -1 && yDif == 1)
+                    novoPlano.Add(Jogador.Acao.DB);
+                else if (xDif == -1 && yDif == -1)
+                    novoPlano.Add(Jogador.Acao.DC);
+                else if (xDif == 1 && yDif == 1)
+                    novoPlano.Add(Jogador.Acao.EB);
+                else if (xDif == 1 && yDif == -1)
+                    novoPlano.Add(Jogador.Acao.EC);
 
                 lastPos = positionAtual;
             }
@@ -103,6 +116,7 @@ public class Mapa : MonoBehaviour {
         public Position getProximaAcaoDestino()
         {
             Acao acao = getProximaAcao();
+            Position pos;
 
             switch (acao)
             {
@@ -111,29 +125,65 @@ public class Mapa : MonoBehaviour {
                 case Acao.CIMA:
                     gameObject.GetComponent<Animator>().SetBool("Down", false);
                     gameObject.GetComponent<SpriteRenderer>().flipX = true;
-                    if ( mapa.isAndavel( new Position(position.x, position.y + 1) ) )
-                        return new Position(position.x, position.y + 1);
+                    pos = new Position(position.x, position.y + 1);
+                    if ( mapa.isAndavel( pos ))
+                        return pos;
                     else
                         return null;
                 case Acao.BAIXO:
                     gameObject.GetComponent<Animator>().SetBool("Down", true);
                     gameObject.GetComponent<SpriteRenderer>().flipX = true;
-                    if ( mapa.isAndavel( new Position(position.x, position.y - 1) ) )
-                        return new Position(position.x, position.y - 1);
+                    pos = new Position(position.x, position.y - 1);
+                    if (mapa.isAndavel(pos))
+                        return pos;
                     else
                         return null;
                 case Acao.DIREITA:
                     gameObject.GetComponent<Animator>().SetBool("Down", false);
                     gameObject.GetComponent<SpriteRenderer>().flipX = false;
-                    if ( mapa.isAndavel( new Position(position.x + 1, position.y) ) )
-                        return new Position(position.x + 1, position.y);
+                    pos = new Position(position.x + 1, position.y);
+                    if (mapa.isAndavel(pos))
+                        return pos;
                     else
                         return null;
                 case Acao.ESQUERDA:
                     gameObject.GetComponent<Animator>().SetBool("Down", true);
                     gameObject.GetComponent<SpriteRenderer>().flipX = false;
-                    if ( mapa.isAndavel( new Position(position.x - 1, position.y) ) )
-                        return new Position(position.x - 1, position.y);
+                    pos = new Position(position.x - 1, position.y);
+                    if (mapa.isAndavel(pos))
+                        return pos;
+                    else
+                        return null;
+                case Acao.EB:
+                    gameObject.GetComponent<Animator>().SetBool("Down", true);
+                    gameObject.GetComponent<SpriteRenderer>().flipX = true;
+                    pos = new Position(position.x - 1, position.y - 1);
+                    if (mapa.isAndavel(pos))
+                        return pos;
+                    else
+                        return null;
+                case Acao.DB:
+                    gameObject.GetComponent<Animator>().SetBool("Down", false);
+                    gameObject.GetComponent<SpriteRenderer>().flipX = false;
+                    pos = new Position(position.x + 1, position.y - 1);
+                    if (mapa.isAndavel(pos))
+                        return pos;
+                    else
+                        return null;
+                case Acao.EC:
+                    gameObject.GetComponent<Animator>().SetBool("Down", true);
+                    gameObject.GetComponent<SpriteRenderer>().flipX = false;
+                    pos = new Position(position.x - 1, position.y + 1);
+                    if (mapa.isAndavel(pos))
+                        return pos;
+                    else
+                        return null;
+                case Acao.DC:
+                    gameObject.GetComponent<Animator>().SetBool("Down", false);
+                    gameObject.GetComponent<SpriteRenderer>().flipX = true;
+                    pos = new Position(position.x + 1, position.y + 1);
+                    if (mapa.isAndavel(pos))
+                        return pos;
                     else
                         return null;
             }
@@ -278,22 +328,31 @@ public class Mapa : MonoBehaviour {
         return true;
     }
 
-    public Jogador.Acao acaoNecessaria(Position origem, Position destino)
+    /*public Jogador.Acao acaoNecessaria(Position origem, Position destino)
     {
         int xDif = origem.x - destino.x;
         int yDif = origem.y - destino.y;
 
-        if(xDif == 1)
-            return Jogador.Acao.ESQUERDA;
-        else if (xDif == -1)
-            return Jogador.Acao.DIREITA;
-        else if (yDif == 1)
+        if(xDif == 1 && yDif == 0)
             return Jogador.Acao.CIMA;
-        else if (yDif == -1)
+        else if (xDif == -1 && yDif == 0)
             return Jogador.Acao.BAIXO;
+        else if (yDif == 1 && xDif == 0)
+            return Jogador.Acao.ESQUERDA;
+        else if (yDif == -1 && xDif == 0)
+            return Jogador.Acao.DIREITA;
+
+        else if (xDif == -1 && yDif == 1)
+            return Jogador.Acao.EB;
+        else if (xDif == -1 && yDif == -1)
+            return Jogador.Acao.DB;
+        else if (yDif == 1 && xDif == 1)
+            return Jogador.Acao.EC;
+        else if (yDif == 1 && xDif == -1)
+            return Jogador.Acao.DC;
 
         return Jogador.Acao.VAZIO;
-    }
+    }*/
 
 	List<Position> getExpansion(Position origem)
 	{
@@ -301,16 +360,33 @@ public class Mapa : MonoBehaviour {
 		int x = (int)origem.x;
 		int y = (int)origem.y;
 
+        //Esquerda
 		if(x - 1 >= 0)
 			expansion.Add(new Position(x-1, y));
+        //Baixo
 		if(y - 1 >= 0)
 			expansion.Add(new Position(x, y-1));
-		if(x + 1 <= (int)size.x)
+        //Direita
+        if (x + 1 <= (int)size.x)
 			expansion.Add(new Position(x+1, y));
-		if(y + 1 <= (int)size.y)
+        //Cima
+        if (y + 1 <= (int)size.y)
 			expansion.Add(new Position(x, y+1));
 
-		return expansion;
+        // Esquerda - Baixo
+        if (x - 1 >= 0 && y - 1 >= 0)
+            expansion.Add(new Position(x - 1, y - 1));
+        // Direita - Baixo
+        if (y - 1 >= 0 && x + 1 <= (int)size.x)
+            expansion.Add(new Position(x + 1, y - 1));
+        // Esquerda - Cima
+        if (x - 1 >= 0 && y + 1 <= (int)size.y)
+            expansion.Add(new Position(x - 1, y + 1));
+        // Direita - Cima
+        if (y + 1 <= (int)size.y && x + 1 <= (int)size.x)
+            expansion.Add(new Position(x + 1, y + 1));
+
+        return expansion;
 	}
 
 	public List<Position> getVizinhos(Position origem)

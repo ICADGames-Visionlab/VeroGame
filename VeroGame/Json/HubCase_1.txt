@@ -5,7 +5,7 @@
 "listaUsuarioResposta":[], 
 "objetosCena":
 	[
-		{"x":10,"y":5,"largura":1,"altura":1,"sceneId":1},
+		{"x":9,"y":5,"largura":1,"altura":1,"sceneId":1},
 		{"x":0,"y":0,"largura":2,"altura":2}
 	],
 "cenaNome":"CenaTopDown",
