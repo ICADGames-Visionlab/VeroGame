@@ -5,7 +5,11 @@
 "listaUsuarioResposta":[], 
 "listaSceneTrigger": 
 	[
-		{"sceneId":1,"x":-2.636,"y":1.253,"altura":200,"largura":200,"triggerPath":"Empresa"}
+		{"sceneId":1,"x":-2.636,"y":1.253,"altura":200,"largura":200,"triggerPath":"Empresa"},
+		{"sceneId":1,"x":-8,"y":1.2,"altura":200,"largura":200,"triggerPath":"empresa2"},
+		{"sceneId":1,"x":-5.25,"y":-0.55,"altura":200,"largura":200,"triggerPath":"empresa3"},
+		{"sceneId":1,"x":-5.29,"y":2.87,"altura":200,"largura":200,"triggerPath":"empresa4"},
+		{"sceneId":1,"x":6.15,"y":1.24,"altura":200,"largura":200,"triggerPath":"Universidade"}
 	],
 "cenaNome":"CenaMapa",
 "background":"mapaCidade",

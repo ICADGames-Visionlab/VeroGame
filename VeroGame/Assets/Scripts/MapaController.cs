@@ -26,6 +26,12 @@ public class MapaController : MonoBehaviour {
             lastObjectOnMouse.GetComponent<Animator>().SetBool("selecionado", true);
             if (Input.GetMouseButtonDown(0))
                 GameController.ProgredirEtapa(int.Parse(lastObjectOnMouse.name));
+
+            foreach (GameObject gameObject in sceneTriggerList)
+            {
+                if(!gameObject.Equals(lastObjectOnMouse))
+                    gameObject.GetComponent<Animator>().SetBool("selecionado", false);
+            }
         }
         else
         {

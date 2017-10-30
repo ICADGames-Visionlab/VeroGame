@@ -1,0 +1,12 @@
+{"id":2,"x":-413,"y":272,"altura":400,"largura":900,"tipo":1,"texto":"","btOK_Path":"ok","btOK_X":8.45,"btOK_Y":-2.24,"listaResposta":
+					[
+						{"id":1,"x":-178,"y":-124,"altura":80,"largura":1400,"texto":"","marcadorPath":"marcador","marcadorX":[6.53, 7.53],"marcadorY":[-1.22, -1.22]},
+						{"id":2,"x":-178,"y":-226,"altura":80,"largura":1400,"texto":"","marcadorPath":"marcador","marcadorX":[6.53, 7.53],"marcadorY":[-2.22, -2.22]},
+						{"id":3,"x":-178,"y":-328,"altura":80,"largura":1400,"texto":"","marcadorPath":"marcador","marcadorX":[6.53, 7.53],"marcadorY":[-3.22, -3.22]},
+						{"id":4,"x":-178,"y":-430,"altura":80,"largura":1400,"texto":"","marcadorPath":"marcador","marcadorX":[6.53, 7.53],"marcadorY":[-4.22, -4.22]}
+					],
+				"listaUsuarioResposta":
+					[
+					
+					]
+}
