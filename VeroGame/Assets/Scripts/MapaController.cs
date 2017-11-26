@@ -12,6 +12,7 @@ public class MapaController : MonoBehaviour {
 	{
         LoadBackground();
         spawnTriggers();
+
     }
 
     List<GameObject> sceneTriggerList = new List<GameObject>();

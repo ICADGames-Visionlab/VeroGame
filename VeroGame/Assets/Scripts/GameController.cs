@@ -21,7 +21,8 @@ public class GameController : MonoBehaviour {
         HubProcesso,
         HubNivel,
         HubCase,
-        Case
+        Case, 
+        Score
     };
 
 	// Use this for initialization

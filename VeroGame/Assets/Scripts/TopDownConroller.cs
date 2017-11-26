@@ -120,9 +120,8 @@ public class TopDownConroller : MonoBehaviour
                 print(movementVector);
 
                 //jogador.gameObject.transform.position = new Vector3(jogador.gameObject.transform.position.x + movementVector.x / jogador.velocidade, jogador.gameObject.transform.position.y + movementVector.y / jogador.velocidade, jogador.gameObject.transform.position.z);
-                jogador.gameObject.transform.position = Vector3.SmoothDamp(jogador.gameObject.transform.position, newDest, ref velocity, 0.022f);
+                jogador.gameObject.transform.position = Vector3.Lerp(jogador.gameObject.transform.position, newDest, 0.1f);
                 
-
                 if (jogador.gameObject.transform.position == newDest)
                 {
                     jogador.movendo = false;
