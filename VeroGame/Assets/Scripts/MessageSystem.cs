@@ -19,9 +19,7 @@ public class MessageSystem : MonoBehaviour {
     // Use this for initialization
     void Start () {
         DontDestroyOnLoad(gameObject);
-        hideText(Tooltip);
-        hideText(Warning);
-        hideText(Legend);
+        HideAll();
     }
 	
 	// Update is called once per frame
@@ -41,5 +39,12 @@ public class MessageSystem : MonoBehaviour {
     public void hideText(GameObject target)
     {
         target.SetActive(false);
+    }
+
+    public void HideAll()
+    {
+        hideText(Tooltip);
+        hideText(Warning);
+        hideText(Legend);
     }
 }

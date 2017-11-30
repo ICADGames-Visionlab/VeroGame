@@ -42,6 +42,9 @@ public class CaseController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+
+        MessageSystem.instance.HideAll();
+
         caseAtual = DataStorage.getCase(GameController.getEtapaId());
         perguntasCase = caseAtual.getPerguntasValidas();
 

@@ -39,9 +39,13 @@ public class TopDownConroller : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        MessageSystem.instance.HideAll();
+
         LoadBackground();
         LoadObjetos();
         LoadJogador();
+
+        MessageSystem.instance.setText("Nome da Cena", MessageSystem.instance.Legend);
     }
 
     // Update is called once per frame
@@ -123,7 +127,7 @@ public class TopDownConroller : MonoBehaviour
                 print(movementVector);
 
                 //jogador.gameObject.transform.position = new Vector3(jogador.gameObject.transform.position.x + movementVector.x / jogador.velocidade, jogador.gameObject.transform.position.y + movementVector.y / jogador.velocidade, jogador.gameObject.transform.position.z);
-                jogador.gameObject.transform.position = Vector3.Lerp(jogador.gameObject.transform.position, newDest, 0.1f);
+                jogador.gameObject.transform.position = Vector3.MoveTowards(jogador.gameObject.transform.position, newDest, 0.05f);
                 
                 if (jogador.gameObject.transform.position == newDest)
                 {

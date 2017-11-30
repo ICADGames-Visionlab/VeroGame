@@ -12,6 +12,7 @@ public class MapaController : MonoBehaviour {
     // Use this for initialization
     void Start () 
 	{
+        MessageSystem.instance.HideAll();
         LoadBackground();
         spawnTriggers();
 
