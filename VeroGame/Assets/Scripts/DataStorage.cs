@@ -35,6 +35,7 @@ public class DataStorage : MonoBehaviour
         public SceneTrigger[] listaSceneTrigger;
         public string cenaNome;
         public string background;
+        public string soundClip;
         public ObjetosCena[] objetosCena;
         public Jogador jogador;
     }
@@ -157,6 +158,7 @@ public class DataStorage : MonoBehaviour
         public float altura;
         public float largura;
         public string triggerPath;
+        public string sfx;
     }
 
     public static CenaAtual cenaAtual;

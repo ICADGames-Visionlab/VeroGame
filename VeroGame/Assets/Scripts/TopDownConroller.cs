@@ -33,6 +33,9 @@ public class TopDownConroller : MonoBehaviour
     Mapa mapa;
     Mapa.Position destino;
 
+    public GameObject soundSystem;
+    private GameObject soundInstance;
+
     // Use this for initialization
     void Start()
     {
@@ -147,6 +150,15 @@ public class TopDownConroller : MonoBehaviour
             background.transform.position = new Vector3(background.transform.position.x, background.transform.position.y, 2);
         }
         mapa = new Mapa(new Vector2(10, 10));//TODO - encontrar o tamanho do mapa baseado no tile size e o size do background
+
+        AudioClip soundClip = Resources.Load(DataStorage.cenaAtual.soundClip) as AudioClip;
+        if (soundClip != null)
+        {
+            GameObject soundInstance = Instantiate(soundSystem);
+            soundInstance.GetComponent<SoundSystem>().setClip(soundClip);
+            soundInstance.GetComponent<SoundSystem>().setLoop(true);
+            //soundInstance.GetComponent<SoundSystem>().playClip();
+        }
 
         /*for (int x = 0; x < (int)mapa.size.x; x++)
         {

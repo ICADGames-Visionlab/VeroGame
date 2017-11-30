@@ -29,9 +29,14 @@ public class CaseController : MonoBehaviour {
     public Canvas canvas;
     public Text textPrefab;
 
+    public GameObject soundSystem;
+    private GameObject soundInstance;
+
     List<Text> textList = new List<Text>();
     List<MarcadorResposta> marcadoresList = new List<MarcadorResposta>();
     GameObject btProximo;
+    Material btProximoActive;
+    Material btProximoOff;
 
     int indexPerguntaAtual = 0;
 
@@ -50,6 +55,7 @@ public class CaseController : MonoBehaviour {
         LoadPergunta(perguntasCase[indexPerguntaAtual]);
 
         btProximo = LoadBotaoProximo(new Vector3(perguntasCase[indexPerguntaAtual].btOK_X, perguntasCase[indexPerguntaAtual].btOK_Y, -1), new Vector2(1, 1), perguntasCase[indexPerguntaAtual].btOK_Path);
+        btProximoOff = Resources.Load("Darker") as Material;
     }
 	
 	// Update is called once per frame
@@ -76,9 +82,9 @@ public class CaseController : MonoBehaviour {
         if(btProximo != null)
         {
             if (CheckRespostaValida())
-                btProximo.SetActive(true);
+                btProximo.GetComponent<SpriteRenderer>().material = btProximoActive;
             else
-                btProximo.SetActive(false);
+                btProximo.GetComponent<SpriteRenderer>().material = btProximoOff;
         }
     }
 
@@ -101,6 +107,15 @@ public class CaseController : MonoBehaviour {
         if (background != null)
         {
             Instantiate(background);
+        }
+
+        AudioClip soundClip = Resources.Load(DataStorage.cenaAtual.soundClip) as AudioClip;
+        if (soundClip != null)
+        {
+            GameObject soundInstance = Instantiate(soundSystem);
+            soundInstance.GetComponent<SoundSystem>().setClip(soundClip);
+            soundInstance.GetComponent<SoundSystem>().setLoop(true);
+            //soundInstance.GetComponent<SoundSystem>().playClip();
         }
     }
 
@@ -164,6 +179,7 @@ public class CaseController : MonoBehaviour {
         //instance.transform.localScale = dimension;
 
         //AddCollider(instance, new Vector3(dimension.x, dimension.y, 1));
+        btProximoActive = instance.GetComponent<SpriteRenderer>().material;
         return instance;
     }
 

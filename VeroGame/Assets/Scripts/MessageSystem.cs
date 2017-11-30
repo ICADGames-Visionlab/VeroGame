@@ -9,11 +9,11 @@ public class MessageSystem : MonoBehaviour {
     public GameObject Warning;
     public GameObject Legend;
 
-    public static MessageSystem instance = new MessageSystem();
+    public static MessageSystem instance;
 
-    public static MessageSystem getInstance()
+    private void Awake()
     {
-        return instance;
+        instance = this;
     }
 
     // Use this for initialization
@@ -22,9 +22,6 @@ public class MessageSystem : MonoBehaviour {
         hideText(Tooltip);
         hideText(Warning);
         hideText(Legend);
-
-        setText("Oi", Tooltip);
-        
     }
 	
 	// Update is called once per frame
@@ -35,7 +32,7 @@ public class MessageSystem : MonoBehaviour {
         Tooltip.transform.position = mousePos + new Vector2(Tooltip.GetComponent<RectTransform>().rect.width / 2 + 15, -Tooltip.GetComponent<RectTransform>().rect.height);
 	}
 
-    public static void setText(string text, GameObject target)
+    public void setText(string text, GameObject target)
     {
         target.GetComponentInChildren<Text>().text = text;
         target.SetActive(true);

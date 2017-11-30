@@ -6,6 +6,8 @@ using UnityEngine.SceneManagement;
 public class MapaController : MonoBehaviour {
 
     GameObject background;
+    public GameObject soundSystem;
+    private GameObject soundInstance;
 
     // Use this for initialization
     void Start () 
@@ -13,6 +15,7 @@ public class MapaController : MonoBehaviour {
         LoadBackground();
         spawnTriggers();
 
+        MessageSystem.instance.setText("Nome da Cena", MessageSystem.instance.Legend);
     }
 
     List<GameObject> sceneTriggerList = new List<GameObject>();
@@ -24,21 +27,39 @@ public class MapaController : MonoBehaviour {
 
         if (lastObjectOnMouse != null)
         {
+            if(!lastObjectOnMouse.GetComponent<Animator>().GetBool("selecionado"))
+            {
+                playSound(lastObjectOnMouse);
+            }
+
+            MessageSystem.instance.setText("OI", MessageSystem.instance.Tooltip);
+
             lastObjectOnMouse.GetComponent<Animator>().SetBool("selecionado", true);
             if (Input.GetMouseButtonDown(0))
+            {
                 GameController.ProgredirEtapa(int.Parse(lastObjectOnMouse.name));
+                MessageSystem.instance.hideText(MessageSystem.instance.Tooltip);
+            }
+                
 
             foreach (GameObject gameObject in sceneTriggerList)
             {
                 if(!gameObject.Equals(lastObjectOnMouse))
+                {
                     gameObject.GetComponent<Animator>().SetBool("selecionado", false);
+                    stopSound(gameObject);
+                }
+                    
             }
         }
         else
         {
-            foreach(GameObject gameObject in sceneTriggerList)
+            MessageSystem.instance.hideText(MessageSystem.instance.Tooltip);
+
+            foreach (GameObject gameObject in sceneTriggerList)
             {
                 gameObject.GetComponent<Animator>().SetBool("selecionado", false);
+                stopSound(gameObject);
             }
         }
 	}
@@ -49,6 +70,15 @@ public class MapaController : MonoBehaviour {
         if (background != null)
         {
             Instantiate(background);
+        }
+
+        AudioClip soundClip = Resources.Load(DataStorage.cenaAtual.soundClip) as AudioClip;
+        if(soundClip != null)
+        {
+            GameObject soundInstance = Instantiate(soundSystem);
+            soundInstance.GetComponent<SoundSystem>().setClip(soundClip);
+            soundInstance.GetComponent<SoundSystem>().setLoop(true);
+            //soundInstance.GetComponent<SoundSystem>().playClip();
         }
     }
 
@@ -63,7 +93,7 @@ public class MapaController : MonoBehaviour {
                 Vector3 center = new Vector3(sceneTrigger.x, sceneTrigger.y, 0);
                 Vector3 size = new Vector3(sceneTrigger.altura, sceneTrigger.largura, 1);
 
-                CreateSceneTrigger(sceneTrigger.sceneId, center, size, sceneTrigger.triggerPath);
+                CreateSceneTrigger(sceneTrigger.sceneId, center, size, sceneTrigger.triggerPath, sceneTrigger.sfx);
             }
         }
         
@@ -82,7 +112,7 @@ public class MapaController : MonoBehaviour {
 		return null;
 	}
 
-    public void CreateSceneTrigger(int cenaId, Vector3 center, Vector3 size, string gameObjectPath)
+    public void CreateSceneTrigger(int cenaId, Vector3 center, Vector3 size, string gameObjectPath, string sfx)
     {
         GameObject prefabInstance = Resources.Load(gameObjectPath) as GameObject;
 
@@ -92,8 +122,35 @@ public class MapaController : MonoBehaviour {
 
         sceneTriggerList.Add(instance);
 
+        AudioClip soundClip = Resources.Load(sfx) as AudioClip;
+        if (soundClip != null)
+        {
+            GameObject soundInstance = Instantiate(soundSystem, instance.transform);
+            soundInstance.GetComponent<SoundSystem>().setClip(soundClip);
+        }
+
         //BoxCollider collider = instance.AddComponent<BoxCollider>();
         //collider.center = center;
         //collider.size = size;
+    }
+
+    public void stopSound(GameObject go)
+    {
+        if (go.transform.childCount > 0)
+        {
+            SoundSystem system = go.GetComponentInChildren<SoundSystem>();
+            if (system != null)
+                system.stopClip();
+        }
+    }
+
+    public void playSound(GameObject go)
+    {
+        if (go.transform.childCount > 0)
+        {
+            SoundSystem system = go.GetComponentInChildren<SoundSystem>();
+            if (system != null)
+                system.playClip();
+        }
     }
 }
