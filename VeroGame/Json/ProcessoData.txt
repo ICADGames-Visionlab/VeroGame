@@ -1,0 +1,35 @@
+{
+"listaProcesso":[{"id":1,"nome":"Processo 1"}], 
+"listaNivel":[{"id":1,"nome":"Nivel 1"}], 
+"listaCase":
+	 [
+		{"id":1,"nome":"Case 1","listaPergunta":
+			[
+				{"id":1,"x":-413,"y":272,"altura":400,"largura":900,"tipo":1,"texto":"O supervisor da sua área solicitou a todos da equipe que contribuíssem até o final desta semana com sugestões para melhorar os processos de trabalho. Você tem algumas ideias, mas precisa de algum tempo para analisá-las e estruturá-las adequadamente. Entretanto, você está sob pressão pelo prazo de entrega de um projeto e não tem certeza de quando conseguirá tempo. Como você age?","btOK_Path":"ok","btOK_X":8.45,"btOK_Y":-2.24,"listaResposta":
+					[
+						{"id":1,"x":-178,"y":-124,"altura":80,"largura":1400,"texto":"Tenta rever o planejamento de suas atividades para conclusão do projeto e agenda uma reunião com alguns colegas para compartilhar informações e apresentar suas ideias juntos.","marcadorPath":"marcador","marcadorX":[6.53, 7.53],"marcadorY":[-1.22, -1.22]},
+						{"id":2,"x":-178,"y":-226,"altura":80,"largura":1400,"texto":"Como a solicitação foi feita em cima da hora, foca em atender ao prazo de entrega do projeto e deixa para participar da próxima iniciativa de melhorias, caso não esteja tão ocupado.","marcadorPath":"marcador","marcadorX":[6.53, 7.53],"marcadorY":[-2.22, -2.22]},
+						{"id":3,"x":-178,"y":-328,"altura":80,"largura":1400,"texto":"Dedica-se o máximo que puder ao projeto e, no tempo restante, prepara uma versão preliminar para melhoria dos processos, para posterior complementação.","marcadorPath":"marcador","marcadorX":[6.53, 7.53],"marcadorY":[-3.22, -3.22]},
+						{"id":4,"x":-178,"y":-430,"altura":80,"largura":1400,"texto":"Como aprimorar os processos é importante, requisita a extensão do prazo ao seu supervisor, a fim de que toda a equipe possa contribuir e beneficiar-se dos feedbacks.","marcadorPath":"marcador","marcadorX":[6.53, 7.53],"marcadorY":[-4.22, -4.22]}
+					],
+				"listaUsuarioResposta":
+					[
+					
+					]
+				},
+				{"id":2,"x":-413,"y":272,"altura":400,"largura":900,"tipo":1,"texto":"Um novo funcionário foi contratado pela sua empresa e trabalhará na mesma área que você. Seu gerente lhe solicitou que o acompanhasse por alguns meses, ensinando suas atividades e principais processos de trabalho. Após 1 mês, como este apoio ocupa boa parte do seu tempo, algumas das suas tarefas começam a atrasar. Diante disso, como você reage?","btOK_Path":"ok","btOK_X":8.45,"btOK_Y":-2.24,"listaResposta":
+					[
+						{"id":5,"x":-178,"y":-124,"altura":80,"largura":1400,"texto":"Conversa com seu gerente, explica a situação e solicita que ele ajuste suas atividades para que você possa continuar auxiliando o novo funcionário sem comprometer suas tarefas.","marcadorPath":"marcador","marcadorX":[6.53, 7.53],"marcadorY":[-1.22, -1.22]},
+						{"id":6,"x":-178,"y":-226,"altura":80,"largura":1400,"texto":"Informa ao seu colega que você precisa focar nas suas atividades atrasadas e, caso sobre tempo, voltará a apoiá-lo.","marcadorPath":"marcador","marcadorX":[6.53, 7.53],"marcadorY":[-2.22, -2.22]},
+						{"id":7,"x":-178,"y":-328,"altura":80,"largura":1400,"texto":"Conversa com os demais colegas de trabalho e justifica o atraso na conclusão de algumas atividades em função da solicitação do seu gerente para que auxiliasse o novo funcionário.","marcadorPath":"marcador","marcadorX":[6.53, 7.53],"marcadorY":[-3.22, -3.22]},
+						{"id":8,"x":-178,"y":-430,"altura":80,"largura":1400,"texto":"Busca o suporte de um colega para concluir algumas atividades menos importantes.","marcadorPath":"marcador","marcadorX":[6.53, 7.53],"marcadorY":[-4.22, -4.22]}
+					],
+				"listaUsuarioResposta":
+					[
+					
+					]
+				}
+			]
+		}
+	]
+}

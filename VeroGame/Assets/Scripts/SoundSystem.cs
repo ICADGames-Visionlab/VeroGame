@@ -37,4 +37,24 @@ public class SoundSystem : MonoBehaviour
     {
         source.Stop();
     }
+
+    public static void stopSound(GameObject go)
+    {
+        if (go.transform.childCount > 0)
+        {
+            SoundSystem system = go.GetComponentInChildren<SoundSystem>();
+            if (system != null)
+                system.stopClip();
+        }
+    }
+
+    public static void playSound(GameObject go)
+    {
+        if (go.transform.childCount > 0)
+        {
+            SoundSystem system = go.GetComponentInChildren<SoundSystem>();
+            if (system != null)
+                system.playClip();
+        }
+    }
 }

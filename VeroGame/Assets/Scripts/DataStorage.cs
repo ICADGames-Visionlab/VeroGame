@@ -27,17 +27,25 @@ public class DataStorage : MonoBehaviour
             public float largura;
             public float altura;
             public string gameObjectPath;
+            public string sfx;
+            public int sfxLoop = 0;
         }
 
-        public Processo[] listaProcesso;
-        public Nivel[] listaNivel;
-        public Case[] listaCase;
         public SceneTrigger[] listaSceneTrigger;
         public string cenaNome;
         public string background;
         public string soundClip;
         public ObjetosCena[] objetosCena;
         public Jogador jogador;
+        public int id;
+    }
+
+    [Serializable]
+    public class ProcessoData
+    {
+        public Processo[] listaProcesso;
+        public Nivel[] listaNivel;
+        public Case[] listaCase;
     }
 
     [Serializable]
@@ -162,7 +170,9 @@ public class DataStorage : MonoBehaviour
     }
 
     public static CenaAtual cenaAtual;
+    public static ProcessoData processoData;
     public static List<UsuarioResposta> respostasResgistradas = new List<UsuarioResposta>();
+    public static List<int> CasesFinalizados = new List<int>();
 
     void Awake()
     {
@@ -186,6 +196,13 @@ public class DataStorage : MonoBehaviour
         string json = System.IO.File.ReadAllText(GameController.getEtapaFileString());
 
         cenaAtual = JsonUtility.FromJson<CenaAtual>(json);
+    }
+
+    public static void LoadProcessoData()
+    {
+        string json = System.IO.File.ReadAllText("Json/ProcessoData.txt");
+
+        processoData = JsonUtility.FromJson<ProcessoData>(json);
     }
 
     public static void salvarResposta(UsuarioResposta resposta)
@@ -222,6 +239,16 @@ public class DataStorage : MonoBehaviour
         return true;
     }
 
+    public static void registrarCaseFinalizado(int id)
+    {
+        CasesFinalizados.Add(id);
+    }
+
+    public static bool isCaseFinalizado(int id)
+    {
+        return CasesFinalizados.Contains(id);
+    }
+
     public static SceneTrigger[] getAllSceneTrigger()
     {
         return cenaAtual.listaSceneTrigger;
@@ -234,7 +261,7 @@ public class DataStorage : MonoBehaviour
 
     public static Processo getProcesso(int id)
     {
-        foreach(Processo processo in cenaAtual.listaProcesso)
+        foreach(Processo processo in processoData.listaProcesso)
             if (processo.id == id)
                 return processo;
 
@@ -243,7 +270,7 @@ public class DataStorage : MonoBehaviour
 
     public static Nivel getNivel(int id)
     {
-        foreach (Nivel nivel in cenaAtual.listaNivel)
+        foreach (Nivel nivel in processoData.listaNivel)
             if (nivel.id == id)
                 return nivel;
 
@@ -252,7 +279,7 @@ public class DataStorage : MonoBehaviour
 
     public static Case getCase(int id)
     {
-        foreach (Case _case in cenaAtual.listaCase)
+        foreach (Case _case in processoData.listaCase)
             if (_case.id == id)
                 return _case;
 
@@ -262,5 +289,43 @@ public class DataStorage : MonoBehaviour
     public static CenaAtual.ObjetosCena[] getObjetosCena()
     { 
         return cenaAtual.objetosCena;
+    }
+
+    public static String getNomeEtapaAtual(int id)
+    {
+        GameController.Etapa etapa = GameController.getEtapa();
+        switch (etapa)
+        {
+            case GameController.Etapa.HubNivel:
+                return getProcesso(id).nome;
+
+            case GameController.Etapa.HubCase:
+                return getNivel(id).nome;
+
+            case GameController.Etapa.Case:
+                return getCase(id).nome;
+
+            default:
+                return null;
+        }
+    }
+
+    public static String getNomeEtapaProxima(int id)
+    {
+        GameController.Etapa etapa = GameController.getEtapa();
+        switch (etapa)
+        {
+            case GameController.Etapa.HubProcesso:
+                return getProcesso(id).nome;
+
+            case GameController.Etapa.HubNivel:
+                return getNivel(id).nome;
+
+            case GameController.Etapa.HubCase:
+                return getCase(id).nome;
+
+            default:
+                return null;
+        }
     }
 }

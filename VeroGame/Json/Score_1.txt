@@ -1,0 +1,4 @@
+{
+"cenaNome":"CenaScore",
+"background":"FundoTeste"
+}

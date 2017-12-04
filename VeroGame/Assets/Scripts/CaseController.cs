@@ -96,6 +96,7 @@ public class CaseController : MonoBehaviour {
         SalvarRespostas();
         clearText();
         clearMarcador();
+        Timer.stopTimer();
 
         indexPerguntaAtual++;
         if (indexPerguntaAtual < perguntasCase.Count)
@@ -129,7 +130,7 @@ public class CaseController : MonoBehaviour {
             if(marcador.marcado)
             {
                 DataStorage.UsuarioResposta resposta = new DataStorage.UsuarioResposta(marcador.respostaId, caseAtual.id, marcador.indice);
-                string repostaJson = JsonUtility.ToJson(resposta);
+                //string repostaJson = JsonUtility.ToJson(resposta);
                 DataStorage.salvarResposta(resposta);
             }
         }
@@ -145,6 +146,13 @@ public class CaseController : MonoBehaviour {
         {
             LoadResposta(resposta, pergunta.tipo);
         }
+
+        Timer.setTimer(120, FimTempoPergunta);
+    }
+
+    public void FimTempoPergunta()
+    {
+
     }
 
     public void LoadResposta(DataStorage.Resposta resposta, int tipoPergunta)

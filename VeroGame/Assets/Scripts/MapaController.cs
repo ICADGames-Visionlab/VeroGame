@@ -16,7 +16,7 @@ public class MapaController : MonoBehaviour {
         LoadBackground();
         spawnTriggers();
 
-        MessageSystem.instance.setText("Nome da Cena", MessageSystem.instance.Legend);
+        MessageSystem.instance.setText(DataStorage.getNomeEtapaAtual(DataStorage.cenaAtual.id) , MessageSystem.instance.Legend);
     }
 
     List<GameObject> sceneTriggerList = new List<GameObject>();
@@ -30,10 +30,10 @@ public class MapaController : MonoBehaviour {
         {
             if(!lastObjectOnMouse.GetComponent<Animator>().GetBool("selecionado"))
             {
-                playSound(lastObjectOnMouse);
+                SoundSystem.playSound(lastObjectOnMouse);
             }
 
-            MessageSystem.instance.setText("OI", MessageSystem.instance.Tooltip);
+            MessageSystem.instance.setText(DataStorage.getNomeEtapaProxima(DataStorage.cenaAtual.id), MessageSystem.instance.Tooltip);
 
             lastObjectOnMouse.GetComponent<Animator>().SetBool("selecionado", true);
             if (Input.GetMouseButtonDown(0))
@@ -48,7 +48,7 @@ public class MapaController : MonoBehaviour {
                 if(!gameObject.Equals(lastObjectOnMouse))
                 {
                     gameObject.GetComponent<Animator>().SetBool("selecionado", false);
-                    stopSound(gameObject);
+                    SoundSystem.stopSound(gameObject);
                 }
                     
             }
@@ -60,7 +60,7 @@ public class MapaController : MonoBehaviour {
             foreach (GameObject gameObject in sceneTriggerList)
             {
                 gameObject.GetComponent<Animator>().SetBool("selecionado", false);
-                stopSound(gameObject);
+                SoundSystem.stopSound(gameObject);
             }
         }
 	}
@@ -133,25 +133,5 @@ public class MapaController : MonoBehaviour {
         //BoxCollider collider = instance.AddComponent<BoxCollider>();
         //collider.center = center;
         //collider.size = size;
-    }
-
-    public void stopSound(GameObject go)
-    {
-        if (go.transform.childCount > 0)
-        {
-            SoundSystem system = go.GetComponentInChildren<SoundSystem>();
-            if (system != null)
-                system.stopClip();
-        }
-    }
-
-    public void playSound(GameObject go)
-    {
-        if (go.transform.childCount > 0)
-        {
-            SoundSystem system = go.GetComponentInChildren<SoundSystem>();
-            if (system != null)
-                system.playClip();
-        }
     }
 }

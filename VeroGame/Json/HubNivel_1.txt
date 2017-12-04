@@ -1,8 +1,4 @@
 {
-"listaProcesso":[], 
-"listaNivel":[], 
-"listaCase":[],
-"listaUsuarioResposta":[], 
 "listaSceneTrigger": 
 	[
 		{"sceneId":1,"x":-2.636,"y":1.253,"altura":200,"largura":200,"triggerPath":"Empresa","sfx":"sound"},
@@ -14,5 +10,6 @@
 "cenaNome":"CenaMapa",
 "background":"mapaCidade",
 "soundClip":"sound",
-"jogador":{"x":0,"y":0,"largura":100,"altura":100,"gameObjectPath":"Jogador"}
+"jogador":{"x":0,"y":0,"largura":100,"altura":100,"gameObjectPath":"Jogador"},
+"id":1
 }

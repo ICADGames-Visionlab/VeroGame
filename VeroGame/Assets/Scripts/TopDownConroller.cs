@@ -45,25 +45,36 @@ public class TopDownConroller : MonoBehaviour
         LoadObjetos();
         LoadJogador();
 
-        MessageSystem.instance.setText("Nome da Cena", MessageSystem.instance.Legend);
+        MessageSystem.instance.setText(DataStorage.getNomeEtapaAtual(DataStorage.cenaAtual.id), MessageSystem.instance.Legend);
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
+        Vector3 cordenadaMundo = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Mapa.Position cordenadaMapa = getCordenadaMapa(cordenadaMundo);
+
+        int proximaEtapa = mapa.isProgressao(cordenadaMapa);
+        if (proximaEtapa > 0)
+        {
+            MessageSystem.instance.setText(DataStorage.getNomeEtapaProxima(DataStorage.cenaAtual.id), MessageSystem.instance.Tooltip);
+        }
+        else
+        {
+            MessageSystem.instance.hideText(MessageSystem.instance.Tooltip);
+        }
 
         if (Input.GetMouseButtonDown(0))
         {
-            Vector3 cordenadaMundo = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            Mapa.Position cordenadaMapa = getCordenadaMapa(cordenadaMundo);
 
             if (mapa.inMatrix(cordenadaMapa) && mapa.isAndavel(cordenadaMapa))
             {
                 Mapa.AStar_Node destino = mapa.AStar(jogador.position, cordenadaMapa);
                 List<Mapa.Position> caminho = destino.gerarCaminho();
                 jogador.gerarPlano(caminho);
-            }
 
+                
+            }
         }
 
         if (Input.GetKeyDown(KeyCode.UpArrow))
@@ -110,8 +121,15 @@ public class TopDownConroller : MonoBehaviour
                 Vector3 jogadorSize = jogador.gameObject.GetComponent<Renderer>().bounds.size;
                 jogador.gameObject.transform.position = getCordenadaMundo(jogador.position) + (new Vector3(0, jogadorSize.y, 0) / 2.7f);
                 destino = jogador.getProximaAcaoDestino();
-                if(destino == null)
+                if (destino == null)
+                {
                     jogador.gameObject.GetComponent<Animator>().SetBool("IsWalking", false);
+                    SoundSystem.stopSound(this.jogador.gameObject);
+                }
+                else
+                {
+                    SoundSystem.playSound(this.jogador.gameObject);
+                }
             }
 
             if (destino != null)
@@ -137,7 +155,7 @@ public class TopDownConroller : MonoBehaviour
                 }
             }
 
-            int proximaEtapa = mapa.isProgressao(jogador.position);
+            proximaEtapa = mapa.isProgressao(jogador.position);
             if (proximaEtapa > 0)
             {
                 GameController.ProgredirEtapa(proximaEtapa);
@@ -219,6 +237,12 @@ public class TopDownConroller : MonoBehaviour
             Vector3 jogadorSize = jogador.GetComponent<Renderer>().bounds.size;
 
             this.jogador.gameObject.transform.position = getCordenadaMundo(this.jogador.position) + new Vector3(0, jogadorSize.y, 0) / 2.7f ;
+
+            GameObject soundInstance = Instantiate(soundSystem, jogador.transform);
+            AudioClip sfx = Resources.Load(DataStorage.cenaAtual.jogador.sfx) as AudioClip;
+            soundInstance.GetComponent<SoundSystem>().setClip(sfx);
+            if (DataStorage.cenaAtual.jogador.sfxLoop != 0)
+                soundInstance.GetComponent<SoundSystem>().setLoop(true);
         }
     }
 
@@ -351,5 +375,4 @@ public class TopDownConroller : MonoBehaviour
         lr.SetPosition(0, start);
         lr.SetPosition(1, end);
     }
-
 }
