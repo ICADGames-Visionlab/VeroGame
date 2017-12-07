@@ -126,6 +126,8 @@ public class DataStorage : MonoBehaviour
 
             return usuarioRespostas;
         }
+
+        
     }
 
     [Serializable]
@@ -140,6 +142,20 @@ public class DataStorage : MonoBehaviour
         public string marcadorPath;
         public float[] marcadorX;
         public float[] marcadorY;
+        public Fatores[] fatoresList;
+
+        public int getFator(int tipo)
+        {
+            if(fatoresList == null)
+                return 0;
+            foreach (Fatores fator in fatoresList)
+            {
+                if (fator.tipo == tipo)
+                    return fator.valor;
+            }
+
+            return 0;
+        }
     }
 
     [Serializable]
@@ -155,6 +171,13 @@ public class DataStorage : MonoBehaviour
             this.caseId = caseId;
             this.tipo = tipo;
         }
+    }
+
+    [Serializable]
+    public class Fatores
+    {
+        public int tipo;
+        public int valor;
     }
 
     [Serializable]
@@ -284,6 +307,35 @@ public class DataStorage : MonoBehaviour
                 return _case;
 
         return null;
+    }
+
+    public static int getCaseMaxScore(int id)
+    {
+        Case _case = getCase(id);
+        int caseMax = 0;
+        int perguntaMax;
+
+        foreach (Pergunta pergunta in _case.listaPergunta)
+        {
+            perguntaMax = 0;
+            //Descobre o maximo que se pode obter em uma pergunta
+            foreach (Resposta resposta in pergunta.listaResposta)
+            {
+                foreach (Resposta resposta2 in pergunta.listaResposta)
+                {
+                    if(!resposta.Equals(resposta2))
+                    {
+                        int pontos = resposta.getFator(0) + resposta2.getFator(1);
+                        if (perguntaMax < pontos)
+                            perguntaMax = pontos;
+                    }
+                }
+            }
+            //adiciona o gabarito da pergunta a o score do case
+            caseMax += perguntaMax;
+        }
+
+        return caseMax;
     }
 
     public static CenaAtual.ObjetosCena[] getObjetosCena()

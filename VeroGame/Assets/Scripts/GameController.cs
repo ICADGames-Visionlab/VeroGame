@@ -29,6 +29,7 @@ public class GameController : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         DataStorage.LoadProcessoData();
+        print(DataStorage.getCaseMaxScore(1));
         LoadCenaInicial();
     }
 	

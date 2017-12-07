@@ -16,6 +16,6 @@ public class MoveTeste : MonoBehaviour {
 	void Update () {
         Vector3 velocity = Vector3.zero;
 
-        transform.position = Vector3.SmoothDamp(transform.position, finalPos, ref velocity, 1f);
+        transform.position = Vector3.MoveTowards(transform.position, finalPos, 0.1f);
 	}
 }

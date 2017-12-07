@@ -20,7 +20,7 @@ public class Timer : MonoBehaviour {
         if(timerRunning)
         {
             timeLeft -= Time.deltaTime;
-            print(timeLeft);
+            print(getTimeLeftString());
             if(timeLeft <= 0)
             {
                 timeUp();
@@ -61,6 +61,12 @@ public class Timer : MonoBehaviour {
 
     public static string getTimeLeftString()
     {
-        return "null";
+        int minutes;
+        int seconds;
+
+        minutes = (int)timeLeft / 60;
+        seconds = (int)timeLeft % 60;
+
+        return minutes + ":" + seconds;
     }
 }
